@@ -109,6 +109,7 @@ namespace BaseHrm
             txtPassword.BackColor = readOnly ? Color.FromArgb(248, 249, 250) : Color.White;
             btnAddRole.Enabled = !readOnly;
             btnAddPermission.Enabled = !readOnly;
+            toolStripMenuItem2.Enabled = !readOnly;
         }
 
         private void AccountDetailForm_Load(object sender, EventArgs e)
@@ -156,7 +157,7 @@ namespace BaseHrm
             {
                 txtAccountId.Text = _account.AccountId.ToString();
                 txtUsername.Text = _account.Username;
-                txtPassword.Text = _isEditMode ? "" : "••••••••"; 
+                txtPassword.Text = _isEditMode ? "" : "••••••••";
                 if (cmbRole != null)
                     cmbRole.SelectedItem = _account.Role;
                 if (chkIsMaster != null)
@@ -281,7 +282,7 @@ namespace BaseHrm
                 {
                     if (!_assignedRoles.Any(r => r.RoleId == role.RoleId))
                     {
-                        _assignedRoles.Add(role); 
+                        _assignedRoles.Add(role);
                         _addRoles.Add(role);
                         roleWithAccountsDtoBindingSource.ResetBindings(false);
                     }
@@ -499,5 +500,58 @@ namespace BaseHrm
 
             flowLayoutPermissions.ScrollControlIntoView(ctrl);
         }
+
+
+        private RoleWithAccountsDto? GetSelectedRole()
+        {
+            if (dgvRoles.SelectedRows != null && dgvRoles.SelectedRows.Count > 0)
+            {
+                var item = dgvRoles.SelectedRows[0].DataBoundItem as RoleWithAccountsDto;
+                return item;
+            }
+
+            if (dgvRoles.CurrentRow != null)
+            {
+                var item = dgvRoles.CurrentRow.DataBoundItem as RoleWithAccountsDto;
+                return item;
+            }
+
+            return null;
+        }
+
+        private void viewDetailsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ViewRoleDetails();
+        }
+
+        private void ViewRoleDetails()
+        {
+            var selected = GetSelectedRole();
+            if (selected == null) return;
+            var detailForm = ActivatorUtilities.CreateInstance<RoleDetailForm>(_serviceProvider, selected);
+            detailForm.ShowDialog();
+        }
+
+        private async void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            var selected = GetSelectedRole();
+            if (selected == null) return;
+
+            // Hiện hộp thoại xác nhận
+            var result = MessageBox.Show(
+                $"Bạn có chắc muốn xoá quyền [{selected.Name}] khỏi tài khoản không?",
+                "Xác nhận xoá",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (result == DialogResult.Yes)
+            {
+                await _permissionService.RemoveRoleFromAccountAsync(_account.AccountId, selected.RoleId);
+                await LoadRoleData();
+                MessageBox.Show("Đã xoá quyền thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
     }
 }

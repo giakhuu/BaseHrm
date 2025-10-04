@@ -27,5 +27,6 @@ namespace BaseHrm.Data.Service
             int? shiftTypeId = null,
             CancellationToken ct = default);
         Task<ShiftAssignmentDto?> GetAssignmentByIdAsync(int id, CancellationToken ct = default);
+        Task<ShiftAssignmentDto?> getTodayShiftAssignmentAsync();
     }
 }

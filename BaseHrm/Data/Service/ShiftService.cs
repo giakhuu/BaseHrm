@@ -346,5 +346,16 @@ namespace BaseHrm.Data.Service
 
             return dto;
         }
+
+        public async Task<ShiftAssignmentDto?> getTodayShiftAssignmentAsync()
+        {
+            var userInfo = _authService.GetUserInfoFromToken();
+            if (!userInfo.EmployeeId.HasValue) return null;
+            var today = DateTime.Now.Date;
+            var assignments = await _assignRepo.QueryAssignmentsAsync(employeeId: userInfo.EmployeeId.Value, date: today);
+            var assignment = assignments.FirstOrDefault();
+            var dto = _mapper.Map<ShiftAssignmentDto>(assignment);
+            return dto;
+        }
     }
 }

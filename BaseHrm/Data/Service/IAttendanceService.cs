@@ -27,6 +27,9 @@ namespace BaseHrm.Data.Service
         Task<bool> UpdateAsync(AttendanceRecordDto dto, CancellationToken ct = default);
 
         Task<bool> DeleteAsync(int id, CancellationToken ct = default);
+        Task<AttendanceRecordDto> selfCheck(AttendanceRecordDto dto, CancellationToken ct = default);
+        Task<AttendanceRecordDto?> selfTodayAttendance(CancellationToken ct = default);
+        Task<bool> selfCheckOut(CancellationToken ct = default);
     }
 }
 

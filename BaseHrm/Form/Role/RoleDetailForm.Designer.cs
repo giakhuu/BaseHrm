@@ -194,7 +194,6 @@
             txtDescription.ScrollBars = ScrollBars.Vertical;
             txtDescription.Size = new Size(571, 105);
             txtDescription.TabIndex = 5;
-            txtDescription.TextChanged += txtDescription_TextChanged;
             // 
             // lblDescription
             // 

@@ -9,6 +9,8 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace BaseHrm
 {
@@ -18,13 +20,13 @@ namespace BaseHrm
         private bool _isEditMode;
         private bool _isNewRole;
         private readonly List<RolePermission> _permissions = new List<RolePermission>();
-
+        private readonly IServiceProvider _provider;
         private readonly IPermissionService _permissionService;
 
-        public RoleDetailForm(IPermissionService permissionService, RoleWithAccountsDto? role = null, bool isEditMode = false)
+        public RoleDetailForm(IPermissionService permissionService, IServiceProvider provider, RoleWithAccountsDto? role = null, bool isEditMode = false)
         {
             InitializeComponent();
-
+            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
             _permissionService = permissionService ?? throw new ArgumentNullException(nameof(permissionService));
 
             if (role == null)
@@ -153,7 +155,7 @@ namespace BaseHrm
             // Actions CheckedListBox
             var lblActions = new Label
             {
-                Text = "Actions:",
+                Text = "Hành động:",
                 Location = new Point(220, 15),
                 Size = new Size(60, 20),
                 Font = new Font("Segoe UI", 9F, FontStyle.Bold)
@@ -179,7 +181,7 @@ namespace BaseHrm
             // Scope ComboBox
             var lblScope = new Label
             {
-                Text = "Scope:",
+                Text = "Phạm vi:",
                 Location = new Point(500, 15),
                 Size = new Size(50, 20),
                 Font = new Font("Segoe UI", 9F, FontStyle.Bold)
@@ -198,6 +200,7 @@ namespace BaseHrm
                 cmbScope.Items.Add(scope);
             }
             cmbScope.SelectedItem = permission.ScopeType;
+            
             panel.Controls.Add(cmbScope);
 
             var txtScopeValue = new TextBox
@@ -206,10 +209,48 @@ namespace BaseHrm
                 Size = new Size(80, 25),
                 Text = permission.ScopeValue?.ToString() ?? "",
                 ReadOnly = !_isEditMode,
-                PlaceholderText = "Value"
+                PlaceholderText = "Chọn Team"
             };
             panel.Controls.Add(txtScopeValue);
-
+            cmbScope.SelectedIndexChanged += (s, e) =>
+            {
+                if (cmbScope.SelectedItem is ScopeType selectedScope)
+                {
+                    if (ScopeType.Team == selectedScope)
+                    {
+                        txtScopeValue.Enabled = true;
+                        txtScopeValue.PlaceholderText = "Chọn Team";
+                        txtScopeValue.Click += (s,e) =>
+                        {
+                                var teamService = _provider.GetRequiredService<ITeamService>();
+                                var pick = new PickTeamControl(teamService);
+                                var host = new ToolStripControlHost(pick)
+                                {
+                                    Margin = Padding.Empty,
+                                    Padding = Padding.Empty,
+                                };
+                                var popup = new ToolStripDropDown
+                                {
+                                    AutoClose = true,
+                                    DropShadowEnabled = true
+                                };
+                                popup.Items.Add(host);
+                                pick.TeamSelected += async (team) =>
+                                {
+                                    this.Invoke(new Action(async () =>
+                                    {
+                                        txtScopeValue.Text = team.TeamId.ToString();
+                                    }));
+                                    popup.Close();
+                                };
+                                pick.RequestClose += () => popup.Close();
+                                var point = Cursor.Position;
+                                popup.Show(point);
+                                pick.Focus();
+                        };
+                    }
+                }
+            };
             if (_isEditMode)
             {
                 var btnDelete = new Button
@@ -241,6 +282,12 @@ namespace BaseHrm
 
             return panel;
         }
+
+        private void CmbScope_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         private void UpdatePermissionFromControl(Panel panel)
         {
             var permission = panel.Tag as RolePermission;
@@ -480,9 +527,5 @@ namespace BaseHrm
 
         #endregion
 
-        private void txtDescription_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

@@ -235,7 +235,6 @@ namespace BaseHrm.Controls
             if (selected == null) return;
             var detailForm = ActivatorUtilities.CreateInstance<RoleDetailForm>(_serviceProvider, selected);
             detailForm.ShowDialog();
-
         }
 
         private void EditRole()

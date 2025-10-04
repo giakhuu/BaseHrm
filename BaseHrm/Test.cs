@@ -514,5 +514,12 @@ namespace BaseHrm
         {
             await TimekeepingButton_ClickAsync(sender, e);
         }
+
+        private async void checkInButton_Click(object sender, EventArgs e)
+        {
+                SetActiveButton(checkInButton);
+                UpdateContentPanel<CheckInControl>("Chấm công");
+           
+        }
     }
 }

@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             panelHeader = new Panel();
             lblTitle = new Label();
             tabControl1 = new TabControl();
@@ -68,6 +68,9 @@
             descriptionDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             rolePermissionsDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             accountCountDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            toolStripMenuItem1 = new ToolStripMenuItem();
+            toolStripMenuItem2 = new ToolStripMenuItem();
             roleWithAccountsDtoBindingSource = new BindingSource(components);
             panelRoleHeader = new Panel();
             btnAddRole = new ReaLTaiizor.Controls.HopeButton();
@@ -93,6 +96,7 @@
             splitContainer.SuspendLayout();
             panelRoles.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRoles).BeginInit();
+            contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)roleWithAccountsDtoBindingSource).BeginInit();
             panelRoleHeader.SuspendLayout();
             panelAccounts.SuspendLayout();
@@ -317,6 +321,38 @@
             groupBoxAccount.TabStop = false;
             groupBoxAccount.Text = "Thông tin tài khoản";
             // 
+            // chkIsMaster
+            // 
+            chkIsMaster.AutoSize = true;
+            chkIsMaster.Font = new Font("Segoe UI", 9F);
+            chkIsMaster.Location = new Point(611, 120);
+            chkIsMaster.Name = "chkIsMaster";
+            chkIsMaster.Size = new Size(90, 24);
+            chkIsMaster.TabIndex = 12;
+            chkIsMaster.Text = "Is Master";
+            chkIsMaster.UseVisualStyleBackColor = true;
+            // 
+            // cmbRole
+            // 
+            cmbRole.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbRole.Font = new Font("Segoe UI", 9F);
+            cmbRole.FormattingEnabled = true;
+            cmbRole.Location = new Point(137, 118);
+            cmbRole.Name = "cmbRole";
+            cmbRole.Size = new Size(228, 28);
+            cmbRole.TabIndex = 11;
+            // 
+            // lblRole
+            // 
+            lblRole.AutoSize = true;
+            lblRole.Font = new Font("Segoe UI", 9F);
+            lblRole.ForeColor = Color.FromArgb(73, 80, 87);
+            lblRole.Location = new Point(37, 121);
+            lblRole.Name = "lblRole";
+            lblRole.Size = new Size(42, 20);
+            lblRole.TabIndex = 10;
+            lblRole.Text = "Role:";
+            // 
             // txtPassword
             // 
             txtPassword.Font = new Font("Segoe UI", 9F);
@@ -402,38 +438,6 @@
             lblAccountId.TabIndex = 0;
             lblAccountId.Text = "Account ID:";
             // 
-            // chkIsMaster
-            // 
-            chkIsMaster.AutoSize = true;
-            chkIsMaster.Font = new Font("Segoe UI", 9F);
-            chkIsMaster.Location = new Point(611, 120);
-            chkIsMaster.Name = "chkIsMaster";
-            chkIsMaster.Size = new Size(96, 24);
-            chkIsMaster.TabIndex = 12;
-            chkIsMaster.Text = "Is Master";
-            chkIsMaster.UseVisualStyleBackColor = true;
-            // 
-            // cmbRole
-            // 
-            cmbRole.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbRole.Font = new Font("Segoe UI", 9F);
-            cmbRole.FormattingEnabled = true;
-            cmbRole.Location = new Point(137, 118);
-            cmbRole.Name = "cmbRole";
-            cmbRole.Size = new Size(228, 28);
-            cmbRole.TabIndex = 11;
-            // 
-            // lblRole
-            // 
-            lblRole.AutoSize = true;
-            lblRole.Font = new Font("Segoe UI", 9F);
-            lblRole.ForeColor = Color.FromArgb(73, 80, 87);
-            lblRole.Location = new Point(37, 121);
-            lblRole.Name = "lblRole";
-            lblRole.Size = new Size(39, 20);
-            lblRole.TabIndex = 10;
-            lblRole.Text = "Role:";
-            // 
             // tabPage2
             // 
             tabPage2.Controls.Add(splitContainer);
@@ -488,25 +492,26 @@
             dgvRoles.BorderStyle = BorderStyle.None;
             dgvRoles.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dgvRoles.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = Color.FromArgb(99, 110, 114);
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(99, 110, 114);
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvRoles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(99, 110, 114);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(99, 110, 114);
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvRoles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvRoles.ColumnHeadersHeight = 45;
             dgvRoles.Columns.AddRange(new DataGridViewColumn[] { roleIdDataGridViewTextBoxColumn, nameDataGridViewTextBoxColumn, descriptionDataGridViewTextBoxColumn, rolePermissionsDataGridViewTextBoxColumn, accountCountDataGridViewTextBoxColumn });
+            dgvRoles.ContextMenuStrip = contextMenuStrip1;
             dgvRoles.DataSource = roleWithAccountsDtoBindingSource;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = Color.White;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = Color.FromArgb(73, 80, 87);
-            dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(255, 248, 220);
-            dataGridViewCellStyle4.SelectionForeColor = Color.FromArgb(33, 37, 41);
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
-            dgvRoles.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.White;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = Color.FromArgb(73, 80, 87);
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(255, 248, 220);
+            dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(33, 37, 41);
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvRoles.DefaultCellStyle = dataGridViewCellStyle2;
             dgvRoles.Dock = DockStyle.Fill;
             dgvRoles.EnableHeadersVisualStyles = false;
             dgvRoles.GridColor = Color.FromArgb(230, 230, 230);
@@ -563,6 +568,28 @@
             accountCountDataGridViewTextBoxColumn.Name = "accountCountDataGridViewTextBoxColumn";
             accountCountDataGridViewTextBoxColumn.ReadOnly = true;
             accountCountDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.ImageScalingSize = new Size(20, 20);
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem2 });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(246, 80);
+            contextMenuStrip1.Text = "Quyền tài khoản";
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(245, 24);
+            toolStripMenuItem1.Text = "Xem chi tiết";
+            toolStripMenuItem1.Click += viewDetailsToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem2
+            // 
+            toolStripMenuItem2.Name = "toolStripMenuItem2";
+            toolStripMenuItem2.Size = new Size(245, 24);
+            toolStripMenuItem2.Text = "Xóa quyền khỏi tài khoản";
+            toolStripMenuItem2.Click += toolStripMenuItem2_Click;
             // 
             // roleWithAccountsDtoBindingSource
             // 
@@ -756,6 +783,7 @@
             splitContainer.ResumeLayout(false);
             panelRoles.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvRoles).EndInit();
+            contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)roleWithAccountsDtoBindingSource).EndInit();
             panelRoleHeader.ResumeLayout(false);
             panelRoleHeader.PerformLayout();
@@ -817,5 +845,8 @@
         private CheckBox chkIsMaster;
         private ComboBox cmbRole;
         private Label lblRole;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem toolStripMenuItem2;
     }
 }

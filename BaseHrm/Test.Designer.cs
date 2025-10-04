@@ -30,6 +30,7 @@
             shiftsButton = new Button();
             teamsButton = new Button();
             employeesButton = new Button();
+            checkInButton = new Button();
             logoPanel = new Panel();
             logoLabel = new Label();
             contentPanel = new Panel();
@@ -129,6 +130,7 @@
             menuPanel.Controls.Add(shiftsButton);
             menuPanel.Controls.Add(teamsButton);
             menuPanel.Controls.Add(employeesButton);
+            menuPanel.Controls.Add(checkInButton);
             menuPanel.Dock = DockStyle.Fill;
             menuPanel.Location = new Point(0, 160);
             menuPanel.Margin = new Padding(3, 4, 3, 4);
@@ -146,7 +148,7 @@
             roleButton.FlatStyle = FlatStyle.Flat;
             roleButton.Font = new Font("Segoe UI", 12F);
             roleButton.ForeColor = Color.White;
-            roleButton.Location = new Point(0, 421);
+            roleButton.Location = new Point(0, 508);
             roleButton.Margin = new Padding(3, 4, 3, 4);
             roleButton.Name = "roleButton";
             roleButton.Padding = new Padding(23, 0, 0, 0);
@@ -166,7 +168,7 @@
             accountButton.FlatStyle = FlatStyle.Flat;
             accountButton.Font = new Font("Segoe UI", 12F);
             accountButton.ForeColor = Color.White;
-            accountButton.Location = new Point(0, 334);
+            accountButton.Location = new Point(0, 421);
             accountButton.Margin = new Padding(3, 4, 3, 4);
             accountButton.Name = "accountButton";
             accountButton.Padding = new Padding(23, 0, 0, 0);
@@ -186,7 +188,7 @@
             timekeepingButton.FlatStyle = FlatStyle.Flat;
             timekeepingButton.Font = new Font("Segoe UI", 12F);
             timekeepingButton.ForeColor = Color.White;
-            timekeepingButton.Location = new Point(0, 247);
+            timekeepingButton.Location = new Point(0, 334);
             timekeepingButton.Margin = new Padding(3, 4, 3, 4);
             timekeepingButton.Name = "timekeepingButton";
             timekeepingButton.Padding = new Padding(23, 0, 0, 0);
@@ -206,7 +208,7 @@
             shiftsButton.FlatStyle = FlatStyle.Flat;
             shiftsButton.Font = new Font("Segoe UI", 12F);
             shiftsButton.ForeColor = Color.White;
-            shiftsButton.Location = new Point(0, 160);
+            shiftsButton.Location = new Point(0, 247);
             shiftsButton.Margin = new Padding(3, 4, 3, 4);
             shiftsButton.Name = "shiftsButton";
             shiftsButton.Padding = new Padding(23, 0, 0, 0);
@@ -226,7 +228,7 @@
             teamsButton.FlatStyle = FlatStyle.Flat;
             teamsButton.Font = new Font("Segoe UI", 12F);
             teamsButton.ForeColor = Color.White;
-            teamsButton.Location = new Point(0, 80);
+            teamsButton.Location = new Point(0, 167);
             teamsButton.Margin = new Padding(3, 4, 3, 4);
             teamsButton.Name = "teamsButton";
             teamsButton.Padding = new Padding(23, 0, 0, 0);
@@ -246,7 +248,7 @@
             employeesButton.FlatStyle = FlatStyle.Flat;
             employeesButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             employeesButton.ForeColor = Color.White;
-            employeesButton.Location = new Point(0, 0);
+            employeesButton.Location = new Point(0, 87);
             employeesButton.Margin = new Padding(3, 4, 3, 4);
             employeesButton.Name = "employeesButton";
             employeesButton.Padding = new Padding(23, 0, 0, 0);
@@ -256,6 +258,26 @@
             employeesButton.TextAlign = ContentAlignment.MiddleLeft;
             employeesButton.UseVisualStyleBackColor = false;
             employeesButton.Click += EmployeesButton_Click;
+            // 
+            // checkInButton
+            // 
+            checkInButton.BackColor = Color.Transparent;
+            checkInButton.Cursor = Cursors.Hand;
+            checkInButton.Dock = DockStyle.Top;
+            checkInButton.FlatAppearance.BorderSize = 0;
+            checkInButton.FlatStyle = FlatStyle.Flat;
+            checkInButton.Font = new Font("Segoe UI", 12F);
+            checkInButton.ForeColor = Color.White;
+            checkInButton.Location = new Point(0, 0);
+            checkInButton.Margin = new Padding(3, 4, 3, 4);
+            checkInButton.Name = "checkInButton";
+            checkInButton.Padding = new Padding(23, 0, 0, 0);
+            checkInButton.Size = new Size(320, 87);
+            checkInButton.TabIndex = 6;
+            checkInButton.Text = "⏰Chấm công";
+            checkInButton.TextAlign = ContentAlignment.MiddleLeft;
+            checkInButton.UseVisualStyleBackColor = false;
+            checkInButton.Click += checkInButton_Click;
             // 
             // logoPanel
             // 
@@ -331,6 +353,7 @@
         private System.Windows.Forms.Label logoLabel;
         private System.Windows.Forms.Panel menuPanel;
         private System.Windows.Forms.Button employeesButton;
+        private System.Windows.Forms.Button checkInButton;
         private System.Windows.Forms.Button teamsButton;
         private System.Windows.Forms.Button shiftsButton;
         private System.Windows.Forms.Button timekeepingButton;

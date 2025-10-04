@@ -80,6 +80,7 @@ namespace BaseHrm
                     services.AddTransient<RoleManagementControl>();
                     services.AddTransient<PickRoleControl>();
                     services.AddTransient<PickTeamControl>();
+                    services.AddTransient<CheckInControl>();
                     // AutoMapper
                     services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfile).Assembly);
                     services.AddMemoryCache();

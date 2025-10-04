@@ -299,5 +299,57 @@ namespace BaseHrm.Data.Service
                         employeeId = userInfo.Value.EmployeeId;
                     }
                 }
+
+        public async Task<AttendanceRecordDto> selfCheck(AttendanceRecordDto dto, CancellationToken ct = default)
+        {
+            var userInfo = _authService?.GetUserInfoFromToken();
+            DeconstructUserInfo(userInfo, out var accountId, out var isMaster, out var employeeId);
+            if (!employeeId.HasValue)
+                throw new UnauthorizedAccessException("Không xác định được nhân viên.");
+            var entity = new AttendanceRecord
+            {
+                EmployeeId = dto.EmployeeId,
+                CheckIn = dto.CheckIn,
+                CheckOut = dto.CheckOut,
+                ShiftAssignmentId = dto.ShiftAssignmentId,
+            };
+            await ComputeDurationAndOvertimeAsync(entity);
+            var created = await _repo.AddAsync(entity, CancellationToken.None);
+            var loaded = await _repo.GetByIdAsync(created.AttendanceRecordId, CancellationToken.None);
+            return _mapper.Map<AttendanceRecordDto>(loaded!);
+        }
+
+        public async Task<AttendanceRecordDto?> selfTodayAttendance(CancellationToken ct = default)
+        {
+            var userInfo = _authService?.GetUserInfoFromToken();
+            DeconstructUserInfo(userInfo, out var accountId, out var isMaster, out var employeeId);
+            if (!employeeId.HasValue)
+                throw new UnauthorizedAccessException("Không xác định được nhân viên.");
+            var today = DateTime.Today;
+            var record = await _db.AttendanceRecords
+                .Where(r => r.EmployeeId == employeeId.Value && r.CheckIn.Date == today)
+                .OrderByDescending(r => r.CheckIn)
+                .FirstOrDefaultAsync(ct);
+            if (record == null) return null;
+            return _mapper.Map<AttendanceRecordDto>(record);
+        }
+
+        public async Task<bool> selfCheckOut(CancellationToken ct = default)
+        {
+            var userInfo = _authService?.GetUserInfoFromToken();
+            DeconstructUserInfo(userInfo, out var accountId, out var isMaster, out var employeeId);
+            if (!employeeId.HasValue)
+                throw new UnauthorizedAccessException("Không xác định được nhân viên.");
+            var today = DateTime.Today;
+            var record = await _db.AttendanceRecords
+                .Where(r => r.EmployeeId == employeeId.Value && r.CheckIn.Date == today && r.CheckOut == null)
+                .OrderByDescending(r => r.CheckIn)
+                .FirstOrDefaultAsync(ct);
+            if (record == null) return false;
+            record.CheckOut = DateTime.Now;
+            await ComputeDurationAndOvertimeAsync(record);
+            await _repo.UpdateAsync(record, ct);
+            return true;
+        }
     }
 }
