@@ -56,6 +56,7 @@
         {
             components = new System.ComponentModel.Container();
             panelHeader = new Panel();
+            button3 = new Button();
             lblTitle = new Label();
             btnAddRecord = new Button();
             btnExportData = new Button();
@@ -135,6 +136,7 @@
             lblRecordCount = new Label();
             progressBar = new ProgressBar();
             txtTeamSearch = new TextBox();
+            button4 = new Button();
             panelHeader.SuspendLayout();
             panelSummary.SuspendLayout();
             tableLayoutSummary.SuspendLayout();
@@ -156,6 +158,8 @@
             // panelHeader
             // 
             panelHeader.BackColor = Color.FromArgb(33, 37, 41);
+            panelHeader.Controls.Add(button4);
+            panelHeader.Controls.Add(button3);
             panelHeader.Controls.Add(lblTitle);
             panelHeader.Controls.Add(btnAddRecord);
             panelHeader.Controls.Add(btnExportData);
@@ -167,6 +171,24 @@
             panelHeader.Padding = new Padding(23, 20, 23, 20);
             panelHeader.Size = new Size(1600, 107);
             panelHeader.TabIndex = 0;
+            // 
+            // button3
+            // 
+            button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button3.BackColor = Color.FromArgb(0, 123, 255);
+            button3.FlatAppearance.BorderSize = 0;
+            button3.FlatAppearance.MouseOverBackColor = Color.FromArgb(0, 86, 179);
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            button3.ForeColor = Color.White;
+            button3.Location = new Point(1062, 27);
+            button3.Margin = new Padding(3, 4, 3, 4);
+            button3.Name = "button3";
+            button3.Size = new Size(114, 60);
+            button3.TabIndex = 4;
+            button3.Text = "📊 Lưu trữ";
+            button3.UseVisualStyleBackColor = false;
+            button3.Click += button3_Click;
             // 
             // lblTitle
             // 
@@ -1095,6 +1117,24 @@
             txtTeamSearch.Size = new Size(200, 30);
             txtTeamSearch.TabIndex = 10;
             // 
+            // button4
+            // 
+            button4.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button4.BackColor = Color.FromArgb(0, 123, 255);
+            button4.FlatAppearance.BorderSize = 0;
+            button4.FlatAppearance.MouseOverBackColor = Color.FromArgb(0, 86, 179);
+            button4.FlatStyle = FlatStyle.Flat;
+            button4.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            button4.ForeColor = Color.White;
+            button4.Location = new Point(933, 27);
+            button4.Margin = new Padding(3, 4, 3, 4);
+            button4.Name = "button4";
+            button4.Size = new Size(114, 60);
+            button4.TabIndex = 5;
+            button4.Text = "📊 Khôi phục";
+            button4.UseVisualStyleBackColor = false;
+            button4.Click += button4_Click;
+            // 
             // AttendanceManagementControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -1227,5 +1267,7 @@
         private Button button2;
         private Label label3;
         private TextBox textBox1;
+        private Button button3;
+        private Button button4;
     }
 }

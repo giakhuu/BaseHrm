@@ -49,8 +49,6 @@
             lblEmployeeId = new Label();
             groupBoxAccount = new GroupBox();
             chkIsMaster = new CheckBox();
-            cmbRole = new ComboBox();
-            lblRole = new Label();
             txtPassword = new TextBox();
             lblPassword = new Label();
             txtLastLogin = new TextBox();
@@ -83,6 +81,7 @@
             btnSave = new Button();
             btnCancel = new Button();
             panelButtons = new Panel();
+            activeCheckBox = new CheckBox();
             panelHeader.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -204,9 +203,9 @@
             lblEmployeePosition.ForeColor = Color.FromArgb(73, 80, 87);
             lblEmployeePosition.Location = new Point(471, 117);
             lblEmployeePosition.Name = "lblEmployeePosition";
-            lblEmployeePosition.Size = new Size(64, 20);
+            lblEmployeePosition.Size = new Size(47, 20);
             lblEmployeePosition.TabIndex = 8;
-            lblEmployeePosition.Text = "Position:";
+            lblEmployeePosition.Text = "Vị trí: ";
             // 
             // txtEmployeePhone
             // 
@@ -226,9 +225,9 @@
             lblEmployeePhone.ForeColor = Color.FromArgb(73, 80, 87);
             lblEmployeePhone.Location = new Point(471, 70);
             lblEmployeePhone.Name = "lblEmployeePhone";
-            lblEmployeePhone.Size = new Size(53, 20);
+            lblEmployeePhone.Size = new Size(39, 20);
             lblEmployeePhone.TabIndex = 6;
-            lblEmployeePhone.Text = "Phone:";
+            lblEmployeePhone.Text = "SĐT:";
             // 
             // txtEmployeeEmail
             // 
@@ -270,9 +269,9 @@
             lblEmployeeName.ForeColor = Color.FromArgb(73, 80, 87);
             lblEmployeeName.Location = new Point(37, 117);
             lblEmployeeName.Name = "lblEmployeeName";
-            lblEmployeeName.Size = new Size(52, 20);
+            lblEmployeeName.Size = new Size(80, 20);
             lblEmployeeName.TabIndex = 2;
-            lblEmployeeName.Text = "Name:";
+            lblEmployeeName.Text = "Họ và tên: ";
             // 
             // txtEmployeeId
             // 
@@ -292,16 +291,14 @@
             lblEmployeeId.ForeColor = Color.FromArgb(73, 80, 87);
             lblEmployeeId.Location = new Point(37, 70);
             lblEmployeeId.Name = "lblEmployeeId";
-            lblEmployeeId.Size = new Size(97, 20);
+            lblEmployeeId.Size = new Size(100, 20);
             lblEmployeeId.TabIndex = 0;
-            lblEmployeeId.Text = "Employee ID:";
+            lblEmployeeId.Text = "Mã nhân viên:";
             // 
             // groupBoxAccount
             // 
             groupBoxAccount.BackColor = Color.White;
             groupBoxAccount.Controls.Add(chkIsMaster);
-            groupBoxAccount.Controls.Add(cmbRole);
-            groupBoxAccount.Controls.Add(lblRole);
             groupBoxAccount.Controls.Add(txtPassword);
             groupBoxAccount.Controls.Add(lblPassword);
             groupBoxAccount.Controls.Add(txtLastLogin);
@@ -325,33 +322,12 @@
             // 
             chkIsMaster.AutoSize = true;
             chkIsMaster.Font = new Font("Segoe UI", 9F);
-            chkIsMaster.Location = new Point(611, 120);
+            chkIsMaster.Location = new Point(37, 246);
             chkIsMaster.Name = "chkIsMaster";
             chkIsMaster.Size = new Size(90, 24);
             chkIsMaster.TabIndex = 12;
             chkIsMaster.Text = "Is Master";
             chkIsMaster.UseVisualStyleBackColor = true;
-            // 
-            // cmbRole
-            // 
-            cmbRole.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbRole.Font = new Font("Segoe UI", 9F);
-            cmbRole.FormattingEnabled = true;
-            cmbRole.Location = new Point(137, 118);
-            cmbRole.Name = "cmbRole";
-            cmbRole.Size = new Size(228, 28);
-            cmbRole.TabIndex = 11;
-            // 
-            // lblRole
-            // 
-            lblRole.AutoSize = true;
-            lblRole.Font = new Font("Segoe UI", 9F);
-            lblRole.ForeColor = Color.FromArgb(73, 80, 87);
-            lblRole.Location = new Point(37, 121);
-            lblRole.Name = "lblRole";
-            lblRole.Size = new Size(42, 20);
-            lblRole.TabIndex = 10;
-            lblRole.Text = "Role:";
             // 
             // txtPassword
             // 
@@ -434,9 +410,9 @@
             lblAccountId.ForeColor = Color.FromArgb(73, 80, 87);
             lblAccountId.Location = new Point(37, 70);
             lblAccountId.Name = "lblAccountId";
-            lblAccountId.Size = new Size(85, 20);
+            lblAccountId.Size = new Size(98, 20);
             lblAccountId.TabIndex = 0;
-            lblAccountId.Text = "Account ID:";
+            lblAccountId.Text = "Mã tài khoản:";
             // 
             // tabPage2
             // 
@@ -574,7 +550,7 @@
             contextMenuStrip1.ImageScalingSize = new Size(20, 20);
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem2 });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(246, 80);
+            contextMenuStrip1.Size = new Size(246, 52);
             contextMenuStrip1.Text = "Quyền tài khoản";
             // 
             // toolStripMenuItem1
@@ -744,6 +720,7 @@
             // panelButtons
             // 
             panelButtons.BackColor = Color.White;
+            panelButtons.Controls.Add(activeCheckBox);
             panelButtons.Controls.Add(btnCancel);
             panelButtons.Controls.Add(btnSave);
             panelButtons.Dock = DockStyle.Bottom;
@@ -752,6 +729,16 @@
             panelButtons.Name = "panelButtons";
             panelButtons.Size = new Size(914, 80);
             panelButtons.TabIndex = 2;
+            // 
+            // activeCheckBox
+            // 
+            activeCheckBox.AutoSize = true;
+            activeCheckBox.Location = new Point(60, 32);
+            activeCheckBox.Name = "activeCheckBox";
+            activeCheckBox.Size = new Size(161, 24);
+            activeCheckBox.TabIndex = 2;
+            activeCheckBox.Text = "Trạng thái kích hoạt";
+            activeCheckBox.UseVisualStyleBackColor = true;
             // 
             // AccountDetailForm
             // 
@@ -791,6 +778,7 @@
             panelPermissionHeader.ResumeLayout(false);
             panelPermissionHeader.PerformLayout();
             panelButtons.ResumeLayout(false);
+            panelButtons.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -843,10 +831,9 @@
         private Label lblPermissionsTitle;
         private FlowLayoutPanel flowLayoutPermissions;
         private CheckBox chkIsMaster;
-        private ComboBox cmbRole;
-        private Label lblRole;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem toolStripMenuItem2;
+        private CheckBox activeCheckBox;
     }
 }

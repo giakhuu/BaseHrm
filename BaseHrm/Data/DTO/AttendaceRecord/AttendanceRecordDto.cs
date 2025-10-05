@@ -15,6 +15,11 @@ namespace BaseHrm.Data.DTO
         public string FullName { get; set; } = "";
         public string? PositionName { get; set; }
         public string? Email { get; set; }
+        public string? EmployeeEmail { get; set; }
+        public string? EmployeePhone { get; set; }
+        public string? EmployeePosition { get; set; }
+        public string? EmployeeFirstName { get; set; }
+        public string? EmployeeLastName { get; set; }
 
         public DateTime CheckIn { get; set; }
         public DateTime? CheckOut { get; set; }

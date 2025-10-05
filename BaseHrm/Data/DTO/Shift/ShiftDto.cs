@@ -9,5 +9,6 @@
         public decimal ExpectedHours { get; set; }
         public int ShiftTypeId { get; set; }
         public string? ShiftTypeName { get; set; }
+        public decimal? PayMultiplier { get; set; }
     }
 }

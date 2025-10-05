@@ -11,16 +11,18 @@
         public TimeSpan ShiftEnd { get; set; }
         public decimal ExpectedHours { get; set; }
         public string? ShiftTypeName { get; set; }
+        public int? ShiftTypeId { get; set; }
+        public decimal? PayMultiplier { get; set; }
 
         public int EmployeeId { get; set; }
         public string EmployeeFirstName { get; set; } = "";
         public string EmployeeLastName { get; set; } = "";
-        public string EmployeeFullName => $"{EmployeeFirstName} {EmployeeLastName}";
         public string? EmployeeEmail { get; set; }
         public string? EmployeePhone { get; set; }
         public string? EmployeePosition { get; set; }
 
         public int? ApprovedByAccountId { get; set; }
         public string? ApproverName { get; set; }
+        public string EmployeeFullName => $"{EmployeeFirstName} {EmployeeLastName}";
     }
 }

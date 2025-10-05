@@ -14,6 +14,7 @@ namespace BaseHrm.Data.DTO
         public string Role { get; set; } = "";
         public bool IsMaster { get; set; }
         public DateTime? LastLogin { get; set; }
+        public bool IsActive { get; set; }
 
         public int EmployeeId { get; set; }               // "Mã"
         public string? EmployeeFullName { get; set; }     // FullName

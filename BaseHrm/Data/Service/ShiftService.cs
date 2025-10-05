@@ -156,6 +156,23 @@ namespace BaseHrm.Data.Service
 
         public async Task<bool> DeleteShiftAsync(int id, CancellationToken ct = default)
         {
+            // Xóa AttendanceRecord liên quan đến các ShiftAssignment của Shift này
+            var assignments = await _assignRepo.QueryAssignmentsAsync(shiftTypeId: null, ct: ct);
+            var relatedAssignments = assignments.Where(a => a.ShiftId == id).ToList();
+
+            foreach (var assignment in relatedAssignments)
+            {
+                var attendanceRecords = await _db.AttendanceRecords
+                    .Where(ar => ar.ShiftAssignmentId == assignment.ShiftAssignmentId)
+                    .ToListAsync(ct);
+
+                _db.AttendanceRecords.RemoveRange(attendanceRecords);
+                await _db.SaveChangesAsync(ct);
+
+                await _assignRepo.DeleteAsync(assignment.ShiftAssignmentId, ct);
+            }
+
+            // Cuối cùng xóa Shift
             var existing = await _shiftRepo.GetByIdAsync(id, ct);
             if (existing == null) return false;
             await _shiftRepo.DeleteAsync(id, ct);
@@ -206,7 +223,7 @@ namespace BaseHrm.Data.Service
             }
 
             var allowedIds = await GetAllowedEmployeeIdsAsync(userInfo.AccountId ?? 0, userInfo.EmployeeId, ct);
-            var allAssignments = await _assignRepo.QueryAssignmentsAsync(null, date, dateFrom, dateTo, shiftTypeId, ct);
+            var allAssignments = await _assignRepo.QueryAssignmentsAsync(employeeId, date, dateFrom, dateTo, shiftTypeId, ct);
             if (teamId.HasValue)
             {
                 var teamEmployeeIds = await _db.TeamMembers.Where(tm => tm.TeamId == teamId.Value).Select(tm => tm.EmployeeId).ToListAsync(ct);
@@ -224,7 +241,8 @@ namespace BaseHrm.Data.Service
                 var allowedIds = await GetAllowedEmployeeIdsAsync(userInfo.AccountId ?? 0, userInfo.EmployeeId, ct);
                 if (!allowedIds.Contains(dto.EmployeeId))
                     throw new UnauthorizedAccessException("Bạn không có quyền gán ca cho nhân viên này.");
-                var hasPerm = await _permissionService.HasPermissionAsync(userInfo.AccountId ?? 0, Data.Enums.ModuleName.Shift, Data.Enums.PermissionAction.Create, Data.Enums.ScopeType.Global, null, ct);
+                var hasPerm = 
+                    await _permissionService.HasPermissionAsync(userInfo.AccountId ?? 0, Data.Enums.ModuleName.Shift, Data.Enums.PermissionAction.Create, Data.Enums.ScopeType.Global, null, ct);
                 if (!hasPerm)
                     throw new UnauthorizedAccessException("Bạn không có quyền tạo ca làm.");
             }

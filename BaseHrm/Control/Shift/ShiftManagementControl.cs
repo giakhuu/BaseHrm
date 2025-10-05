@@ -400,9 +400,9 @@ namespace BaseHrm.Controls
                 {
                     message += $"{i + 1}. {errorMessages[i]}\n";
                 }
-                
-                // Only show message box if this is called from save action, not from real-time validation
-                // We'll add a flag to control this
+
+                label2.Visible = true;
+                errorProvider1.SetError(label2, message);
             }
 
             return isValid;

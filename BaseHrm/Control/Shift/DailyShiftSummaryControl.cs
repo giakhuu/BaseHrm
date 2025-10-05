@@ -2,6 +2,7 @@
 using BaseHrm.Data.Models;
 using BaseHrm.Data.Service;
 using BaseHrm.Reports;
+using Microsoft.EntityFrameworkCore;
 using ScottPlot;
 using ScottPlot.WinForms;
 using System;
@@ -21,6 +22,7 @@ namespace BaseHrm.Controls
     {
         private readonly IShiftService _shiftService;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IBackupRestoreService _backupRestoreService;
 
         private List<ShiftTypeDto>? _shiftTypes;
         private List<ShiftAssignmentDto>? _shiftAssignments;
@@ -31,11 +33,12 @@ namespace BaseHrm.Controls
         private TeamDto? _selectedTeam;
 
         private bool _isInitialLoad = true;
-        public DailyShiftSummaryControl(IShiftService shiftService, IServiceProvider serviceProvider)
+        public DailyShiftSummaryControl(IShiftService shiftService, IServiceProvider serviceProvider, IBackupRestoreService backupRestoreService)
         {
             InitializeComponent();
             _shiftService = shiftService;
             _serviceProvider = serviceProvider;
+            _backupRestoreService = backupRestoreService;
             this.Load += async (s, e) =>
             {
                 await LoadShiftType();
@@ -341,7 +344,7 @@ namespace BaseHrm.Controls
             await Task.Run(() =>
             {
                 var exporter = new ShiftAssignmentReportExporter();
-                exporter.ExportToExcel(shiftAssignmentCopy, selectedPath!, reportTitle, from, to);
+                exporter.ExportToExcel(shiftAssignmentCopy, selectedPath!, reportTitle, from, to, _selectedEmployee?.FullName, _selectedTeam?.Name);
             });
 
             MessageBox.Show("Báo cáo đã được xuất thành công!", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -383,6 +386,103 @@ namespace BaseHrm.Controls
             popup.Show(point);
 
             pick.Focus();
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            if (_isInitialLoad) return;
+            if (_selectedTeam == null) return;
+            _selectedTeam = null;
+            textBox1.Text = "";
+            await refresh();
+        }
+
+        private async void button4_Click(object sender, EventArgs e)
+        {
+            string selectedPath = "";
+            var t = new Thread((ThreadStart)(() =>
+            {
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*";
+                sfd.Title = "Chọn đường dẫn lưu dữ liệu ca làm";
+                sfd.FileName = "BackupCaLam.json";
+                if (sfd.ShowDialog() == DialogResult.Cancel)
+                    return;
+                selectedPath = sfd.FileName;
+            }));
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+            t.Join();
+            if (selectedPath == "")
+            {
+                return;
+            }
+            await _backupRestoreService.BackupShiftAndAssignmentAsync(selectedPath);
+            MessageBox.Show("Đã backup và xóa dữ liệu chấm công thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private async void button5_Click(object sender, EventArgs e)
+        {
+            string selectedPath = "";
+            var t = new Thread((ThreadStart)(() =>
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*";
+                ofd.Title = "Chọn file dữ liệu ca làm để khôi phục";
+                ofd.FileName = "BackupCaLam.json";
+                if (ofd.ShowDialog() == DialogResult.Cancel)
+                    return;
+                selectedPath = ofd.FileName;
+            }));
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+            t.Join();
+            if (selectedPath == "")
+            {
+                return;
+            }
+            try
+            {
+                await _backupRestoreService.RestoreShiftAndAssignmentAsync(selectedPath);
+
+                MessageBox.Show("Đã khôi phục dữ liệu ca làm thành công!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                await LoadShiftAssignments();
+            }
+            catch (DbUpdateException dbEx)
+            {
+                var inner = dbEx.InnerException;
+
+                string detail;
+                if (inner is Microsoft.Data.SqlClient.SqlException sqlEx)
+                {
+                    detail = $"SQL Error {sqlEx.Number}: {sqlEx.Message}";
+                }
+                else
+                {
+                    detail = dbEx.Message;
+                }
+                MessageBox.Show($"Lỗi khi khôi phục dữ liệu ca làm:\n{detail}",
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+            catch (Microsoft.Data.SqlClient.SqlException sqlEx)
+            {
+                MessageBox.Show($"Lỗi SQL: {sqlEx.Number} - {sqlEx.Message}",
+                    "Lỗi SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã có lỗi: {ex.Message}", "Lỗi không xác định",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+             await _shiftService.DeleteShiftAsync(_selectedShift?.ShiftId ?? 0);
+            await LoadShiftAssignments();
         }
     }
 }

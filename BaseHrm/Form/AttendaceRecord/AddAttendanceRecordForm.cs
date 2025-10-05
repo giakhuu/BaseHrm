@@ -148,11 +148,6 @@ namespace BaseHrm
             // Validate check-in time
             var checkInTime = dtpCheckIn.Value;
             var now = DateTime.Now;
-            
-            if (checkInTime > now)
-            {
-                errors.Add("Thời gian check-in không được lớn hơn thời gian hiện tại");
-            }
 
             // Check if check-in is too far in the past (more than 30 days)
             if ((now - checkInTime).TotalDays > 30)
@@ -182,11 +177,6 @@ namespace BaseHrm
                     errors.Add("Thời gian check-out phải sau thời gian check-in");
                 }
 
-                if (checkOutTime > now)
-                {
-                    errors.Add("Thời gian check-out không được lớn hơn thời gian hiện tại");
-                }
-
                 // Validate work duration
                 var workDuration = checkOutTime - checkInTime;
                 if (workDuration.TotalHours > 24)
@@ -214,16 +204,10 @@ namespace BaseHrm
                 }
             }
 
-            // Validate working time against employee's max hours
-            if (EmployeeDto != null && chkHasCheckOut.Checked)
+            // Kiểm tra thông tin người làm
+            if(EmployeeDto.EmployeeId != ShiftAssignmentDto.EmployeeId)
             {
-                var workDuration = dtpCheckOut.Value - checkInTime;
-                var workHours = (decimal)workDuration.TotalHours;
-                
-                if (workHours > EmployeeDto.MaxHoursPerDay)
-                {
-                    errors.Add($"Thời gian làm việc ({workHours:F1} giờ) vượt quá giới hạn tối đa của nhân viên ({EmployeeDto.MaxHoursPerDay} giờ/ngày)");
-                }
+                errors.Add("Nhân viên được chọn không khớp với nhân viên của ca làm việc");
             }
 
             // Show validation errors if any

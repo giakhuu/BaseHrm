@@ -145,11 +145,8 @@ namespace BaseHrm.Data.Service
             int? teamId = null,
             CancellationToken ct = default)
         {
-            Console.WriteLine("Đây là phần in ra các attendacnce từ repo");
             var userInfo = _authService?.GetUserInfoFromToken();
             DeconstructUserInfo(userInfo, out var accountId, out var isMaster, out var currentEmployeeId);
-            Console.WriteLine("Đây là phần in ra các attendacnce từ repo");
-
             List<AttendanceRecord> records;
             if (isMaster)
             {
@@ -159,12 +156,12 @@ namespace BaseHrm.Data.Service
                     var teamEmployeeIds = await _db.TeamMembers.Where(tm => tm.TeamId == teamId.Value).Select(tm => tm.EmployeeId).ToListAsync(ct);
                     records = records.Where(r => teamEmployeeIds.Contains(r.EmployeeId)).ToList();
                 }
-                Console.WriteLine("Đây là phần in ra các attendacnce từ repo đã có: " +records.Count.ToString() + " được tìm thấy");
                 Helper.PrintJson(records);
                 return _mapper.Map<List<AttendanceRecordDto>>(records);
             }
             if (!accountId.HasValue) return new List<AttendanceRecordDto>();
             var allowedIds = await GetAllowedEmployeeIdsAsync(accountId.Value, currentEmployeeId, ct);
+            Console.WriteLine("Mã nhân viên được chọn" + empId.ToString());
             var recordsAll = await _repo.QueryAsync(empId, shiftAssignmentId, shiftTypeId, date, dateFrom, dateTo, isOvertime, ct);
             if (teamId.HasValue)
             {

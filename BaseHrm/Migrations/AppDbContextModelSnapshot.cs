@@ -33,6 +33,9 @@ namespace BaseHrm.Migrations
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsMaster")
                         .HasColumnType("bit");
 
@@ -68,7 +71,8 @@ namespace BaseHrm.Migrations
                         {
                             AccountId = 1,
                             EmployeeId = 1,
-                            IsMaster = false,
+                            IsActive = true,
+                            IsMaster = true,
                             PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii",
                             Username = "john.doe"
                         },
@@ -76,6 +80,7 @@ namespace BaseHrm.Migrations
                         {
                             AccountId = 2,
                             EmployeeId = 2,
+                            IsActive = true,
                             IsMaster = false,
                             PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii",
                             Username = "jane.smith"
@@ -84,6 +89,7 @@ namespace BaseHrm.Migrations
                         {
                             AccountId = 3,
                             EmployeeId = 3,
+                            IsActive = true,
                             IsMaster = false,
                             PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii",
                             Username = "alice.johnson"
@@ -92,6 +98,7 @@ namespace BaseHrm.Migrations
                         {
                             AccountId = 4,
                             EmployeeId = 4,
+                            IsActive = true,
                             IsMaster = false,
                             PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii",
                             Username = "bob.brown"
@@ -100,6 +107,7 @@ namespace BaseHrm.Migrations
                         {
                             AccountId = 5,
                             EmployeeId = 5,
+                            IsActive = true,
                             IsMaster = false,
                             PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii",
                             Username = "charlie.davis"
@@ -108,6 +116,7 @@ namespace BaseHrm.Migrations
                         {
                             AccountId = 6,
                             EmployeeId = 6,
+                            IsActive = true,
                             IsMaster = false,
                             PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii",
                             Username = "diana.evans"
@@ -116,6 +125,7 @@ namespace BaseHrm.Migrations
                         {
                             AccountId = 7,
                             EmployeeId = 7,
+                            IsActive = true,
                             IsMaster = false,
                             PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii",
                             Username = "ethan.franklin"
@@ -124,6 +134,7 @@ namespace BaseHrm.Migrations
                         {
                             AccountId = 8,
                             EmployeeId = 8,
+                            IsActive = true,
                             IsMaster = false,
                             PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii",
                             Username = "fiona.garcia"
@@ -132,6 +143,7 @@ namespace BaseHrm.Migrations
                         {
                             AccountId = 9,
                             EmployeeId = 9,
+                            IsActive = true,
                             IsMaster = false,
                             PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii",
                             Username = "george.harris"
@@ -140,6 +152,7 @@ namespace BaseHrm.Migrations
                         {
                             AccountId = 10,
                             EmployeeId = 10,
+                            IsActive = true,
                             IsMaster = false,
                             PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii",
                             Username = "hannah.irving"
@@ -267,21 +280,6 @@ namespace BaseHrm.Migrations
                         {
                             AccountId = 7,
                             RoleId = 7
-                        },
-                        new
-                        {
-                            AccountId = 8,
-                            RoleId = 8
-                        },
-                        new
-                        {
-                            AccountId = 9,
-                            RoleId = 9
-                        },
-                        new
-                        {
-                            AccountId = 10,
-                            RoleId = 10
                         });
                 });
 
@@ -758,62 +756,44 @@ namespace BaseHrm.Migrations
                         new
                         {
                             RoleId = 1,
-                            Description = "Full access",
+                            Description = "Full access to all modules",
                             Name = "Master"
                         },
                         new
                         {
                             RoleId = 2,
-                            Description = "Administrative access",
-                            Name = "Admin"
+                            Description = "Manage employees",
+                            Name = "Employee Manager"
                         },
                         new
                         {
                             RoleId = 3,
-                            Description = "Manager access",
-                            Name = "Manager"
+                            Description = "Manage teams",
+                            Name = "Team Manager"
                         },
                         new
                         {
                             RoleId = 4,
-                            Description = "Standard employee access",
-                            Name = "Employee"
+                            Description = "Manage shifts",
+                            Name = "Shift Manager"
                         },
                         new
                         {
                             RoleId = 5,
-                            Description = "HR department access",
-                            Name = "HR"
+                            Description = "Manage shift types",
+                            Name = "ShiftType Manager"
                         },
                         new
                         {
                             RoleId = 6,
-                            Description = "Finance access",
-                            Name = "Finance"
+                            Description = "Manage attendance records",
+                            Name = "Attendance Manager"
                         },
                         new
                         {
                             RoleId = 7,
-                            Description = "IT support access",
-                            Name = "IT"
-                        },
-                        new
-                        {
-                            RoleId = 8,
-                            Description = "Sales team access",
-                            Name = "Sales"
-                        },
-                        new
-                        {
-                            RoleId = 9,
-                            Description = "Marketing access",
-                            Name = "Marketing"
-                        },
-                        new
-                        {
-                            RoleId = 10,
-                            Description = "Limited guest access",
-                            Name = "Guest"
+                            Description = "Manage accounts",
+                            Name = "Account Manager"
                         });
                 });
 
@@ -850,9 +830,9 @@ namespace BaseHrm.Migrations
                         new
                         {
                             RolePermissionId = 1,
-                            Actions = 3,
+                            Actions = 15,
                             Module = 0,
-                            RoleId = 1,
+                            RoleId = 2,
                             ScopeType = 0
                         },
                         new
@@ -860,92 +840,60 @@ namespace BaseHrm.Migrations
                             RolePermissionId = 2,
                             Actions = 5,
                             Module = 1,
-                            RoleId = 2,
-                            ScopeType = 0
-                        },
-                        new
-                        {
-                            RolePermissionId = 3,
-                            Actions = 9,
-                            Module = 2,
                             RoleId = 3,
                             ScopeType = 0
                         },
                         new
                         {
-                            RolePermissionId = 4,
-                            Actions = 1,
-                            Module = 4,
+                            RolePermissionId = 3,
+                            Actions = 11,
+                            Module = 2,
                             RoleId = 4,
                             ScopeType = 0
                         },
                         new
                         {
-                            RolePermissionId = 5,
-                            Actions = 6,
-                            Module = 5,
+                            RolePermissionId = 4,
+                            Actions = 3,
+                            Module = 3,
                             RoleId = 5,
                             ScopeType = 0
                         },
                         new
                         {
-                            RolePermissionId = 6,
-                            Actions = 3,
-                            Module = 3,
+                            RolePermissionId = 5,
+                            Actions = 9,
+                            Module = 4,
                             RoleId = 6,
                             ScopeType = 0
                         },
                         new
                         {
-                            RolePermissionId = 7,
-                            Actions = 12,
+                            RolePermissionId = 6,
+                            Actions = 7,
                             Module = 5,
                             RoleId = 7,
                             ScopeType = 0
                         },
                         new
                         {
-                            RolePermissionId = 8,
-                            Actions = 1,
+                            RolePermissionId = 7,
+                            Actions = 15,
                             Module = 0,
-                            RoleId = 8,
+                            RoleId = 1,
+                            ScopeType = 0
+                        },
+                        new
+                        {
+                            RolePermissionId = 8,
+                            Actions = 15,
+                            Module = 1,
+                            RoleId = 1,
                             ScopeType = 0
                         },
                         new
                         {
                             RolePermissionId = 9,
-                            Actions = 2,
-                            Module = 0,
-                            RoleId = 9,
-                            ScopeType = 0
-                        },
-                        new
-                        {
-                            RolePermissionId = 10,
-                            Actions = 5,
-                            Module = 1,
-                            RoleId = 10,
-                            ScopeType = 0
-                        },
-                        new
-                        {
-                            RolePermissionId = 11,
-                            Actions = 15,
-                            Module = 0,
-                            RoleId = 1,
-                            ScopeType = 0
-                        },
-                        new
-                        {
-                            RolePermissionId = 12,
-                            Actions = 15,
-                            Module = 1,
-                            RoleId = 1,
-                            ScopeType = 0
-                        },
-                        new
-                        {
-                            RolePermissionId = 13,
                             Actions = 15,
                             Module = 2,
                             RoleId = 1,
@@ -953,7 +901,7 @@ namespace BaseHrm.Migrations
                         },
                         new
                         {
-                            RolePermissionId = 14,
+                            RolePermissionId = 10,
                             Actions = 15,
                             Module = 3,
                             RoleId = 1,
@@ -961,7 +909,7 @@ namespace BaseHrm.Migrations
                         },
                         new
                         {
-                            RolePermissionId = 15,
+                            RolePermissionId = 11,
                             Actions = 15,
                             Module = 4,
                             RoleId = 1,
@@ -969,7 +917,7 @@ namespace BaseHrm.Migrations
                         },
                         new
                         {
-                            RolePermissionId = 16,
+                            RolePermissionId = 12,
                             Actions = 15,
                             Module = 5,
                             RoleId = 1,
@@ -1595,7 +1543,7 @@ namespace BaseHrm.Migrations
                     b.HasOne("BaseHrm.Data.Models.Shift", "Shift")
                         .WithMany()
                         .HasForeignKey("ShiftId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ApprovedByAccount");

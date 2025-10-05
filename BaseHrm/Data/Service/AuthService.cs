@@ -43,6 +43,7 @@ namespace BaseHrm.Data.Service
             {
                 var account = await _repo.GetByUsernameAsync(username, ct);
                 if (account == null) return (false, "Không tìm thấy tài khoản", null);
+                if (account.IsActive == false) return (false, "Tài khoản bị khoá", null);
                 Console.WriteLine($"mật kh{account.PasswordHash}   {password}");
                 if (!PasswordHasher.VerifyPassword(account.PasswordHash, password))
                 {

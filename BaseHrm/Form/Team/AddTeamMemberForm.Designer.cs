@@ -273,6 +273,7 @@
             teamMemberDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             teamMemberDataGridView.Columns.AddRange(new DataGridViewColumn[] { employeeIdDataGridViewTextBoxColumn1, fullNameDataGridViewTextBoxColumn1, isLeaderDataGridViewCheckBoxColumn, joinedAtDataGridViewTextBoxColumn });
             teamMemberDataGridView.DataSource = teamMemberBindingSource;
+            teamMemberDataGridView.Enabled = false;
             teamMemberDataGridView.Location = new Point(387, 125);
             teamMemberDataGridView.Name = "teamMemberDataGridView";
             teamMemberDataGridView.RowHeadersWidth = 51;

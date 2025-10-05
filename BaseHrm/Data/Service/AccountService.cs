@@ -113,6 +113,8 @@ namespace BaseHrm.Data.Service
                 existing.PasswordHash = PasswordHasher.HashPassword(dto.NewPassword);
             }
 
+            existing.IsActive = dto.IsActive;
+
             await _repo.UpdateAsync(existing, ct);
             await _repo.SaveChangesAsync(ct);
             return true;

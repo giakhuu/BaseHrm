@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using Microsoft.EntityFrameworkCore;
 
 namespace BaseHrm.Controls
 {
@@ -22,6 +23,7 @@ namespace BaseHrm.Controls
         private readonly IAttendanceService _attendanceService;
         private readonly IShiftService _shiftService;
         private readonly IServiceProvider _provider;
+        private readonly IBackupRestoreService _backupRestoreService;
 
         private List<AttendanceRecordDto> _attendanceRecords = new();
         private EmployeeDto? _currentEmployee = null;
@@ -36,13 +38,15 @@ namespace BaseHrm.Controls
         public AttendanceManagementControl(
             IAttendanceService attendanceService,
             IServiceProvider provider,
-            IShiftService shiftService
+            IShiftService shiftService,
+            IBackupRestoreService backupRestoreService
             )
         {
             InitializeComponent();
             _attendanceService = attendanceService;
             _shiftService = shiftService;
             _provider = provider;
+            _backupRestoreService = backupRestoreService;
 
             // Setup date change timer to avoid frequent loading
             _dateChangeTimer.Interval = 500; // 500ms delay
@@ -580,6 +584,88 @@ namespace BaseHrm.Controls
         private async void btnRefresh_Click(object sender, EventArgs e)
         {
             await LoadAttendaceRecordsAsync();
+        }
+
+        private async void button3_Click(object sender, EventArgs e)
+        {
+            string selectedPath = "";
+            var t = new Thread((ThreadStart)(() =>
+            {
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*";
+                sfd.Title = "Chọn đường dẫn lưu dữ liệu chấm công";
+                sfd.FileName = "BackupChamCong.json";
+                if (sfd.ShowDialog() == DialogResult.Cancel)
+                    return;
+                selectedPath = sfd.FileName;
+            }));
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+            t.Join();
+            if (selectedPath == "")
+            {
+                return;
+            }
+            await _backupRestoreService.BackupAttendanceAsync(selectedPath);
+            MessageBox.Show("Đã backup và xóa dữ liệu chấm công thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private async void button4_Click(object sender, EventArgs e)
+        {
+            string selectedPath = "";
+            var t = new Thread((ThreadStart)(() =>
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*";
+                ofd.Title = "Chọn file dữ liệu chấm công để khôi phục";
+                ofd.FileName = "BackupChamCong.json";
+                if (ofd.ShowDialog() == DialogResult.Cancel)
+                    return;
+                selectedPath = ofd.FileName;
+            }));
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+            t.Join();
+            if (selectedPath == "")
+            {
+                return;
+            }
+            try
+            {
+                await _backupRestoreService.RestoreAttendanceAsync(selectedPath);
+
+                MessageBox.Show("Đã khôi phục dữ liệu chấm công thành công!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                await LoadAttendaceRecordsAsync();
+            }
+            catch (DbUpdateException dbEx)
+            {
+                var inner = dbEx.InnerException;
+
+                string detail;
+                if (inner is Microsoft.Data.SqlClient.SqlException sqlEx)
+                {
+                    detail = $"SQL Error {sqlEx.Number}: {sqlEx.Message}";
+                }
+                else
+                {
+                    detail = dbEx.Message;
+                }
+                MessageBox.Show($"Lỗi khi khôi phục dữ liệu chấm công:\n{detail}",
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+            catch (Microsoft.Data.SqlClient.SqlException sqlEx)
+            {
+                MessageBox.Show($"Lỗi SQL: {sqlEx.Number} - {sqlEx.Message}",
+                    "Lỗi SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Đã có lỗi: {ex.Message}", "Lỗi không xác định",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

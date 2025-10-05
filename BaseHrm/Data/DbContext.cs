@@ -118,7 +118,7 @@ namespace BaseHrm.Data
                 sa.HasOne(s => s.Shift)
                   .WithMany()
                   .HasForeignKey(s => s.ShiftId)
-                  .OnDelete(DeleteBehavior.Restrict);
+                  .OnDelete(DeleteBehavior.Cascade);
             });
 
             // AttendanceRecord
@@ -260,7 +260,7 @@ namespace BaseHrm.Data
 
             // Seed Accounts (10 samples, linked to Employees 1-10)
             builder.Entity<Account>().HasData(
-                new Account { AccountId = 1, EmployeeId = 1, Username = "john.doe", PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", IsMaster = false },
+                new Account { AccountId = 1, EmployeeId = 1, Username = "john.doe", PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", IsMaster = true },
                 new Account { AccountId = 2, EmployeeId = 2, Username = "jane.smith", PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", IsMaster = false },
                 new Account { AccountId = 3, EmployeeId = 3, Username = "alice.johnson", PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", IsMaster = false },
                 new Account { AccountId = 4, EmployeeId = 4, Username = "bob.brown", PasswordHash = "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", IsMaster = false },
@@ -274,16 +274,13 @@ namespace BaseHrm.Data
 
             // Seed Roles (10 samples, including Master as 1)
             builder.Entity<Role>().HasData(
-                new Role { RoleId = 1, Name = "Master", Description = "Full access" },
-                new Role { RoleId = 2, Name = "Admin", Description = "Administrative access" },
-                new Role { RoleId = 3, Name = "Manager", Description = "Manager access" },
-                new Role { RoleId = 4, Name = "Employee", Description = "Standard employee access" },
-                new Role { RoleId = 5, Name = "HR", Description = "HR department access" },
-                new Role { RoleId = 6, Name = "Finance", Description = "Finance access" },
-                new Role { RoleId = 7, Name = "IT", Description = "IT support access" },
-                new Role { RoleId = 8, Name = "Sales", Description = "Sales team access" },
-                new Role { RoleId = 9, Name = "Marketing", Description = "Marketing access" },
-                new Role { RoleId = 10, Name = "Guest", Description = "Limited guest access" }
+                new Role { RoleId = 1, Name = "Master", Description = "Full access to all modules" },
+                new Role { RoleId = 2, Name = "Employee Manager", Description = "Manage employees" },
+                new Role { RoleId = 3, Name = "Team Manager", Description = "Manage teams" },
+                new Role { RoleId = 4, Name = "Shift Manager", Description = "Manage shifts" },
+                new Role { RoleId = 5, Name = "ShiftType Manager", Description = "Manage shift types" },
+                new Role { RoleId = 6, Name = "Attendance Manager", Description = "Manage attendance records" },
+                new Role { RoleId = 7, Name = "Account Manager", Description = "Manage accounts" }
             );
 
             // Seed Teams (10 samples, leaders from Employees 1-10)
@@ -342,32 +339,20 @@ namespace BaseHrm.Data
                 new AttendanceRecord { AttendanceRecordId = 10, EmployeeId = 10, CheckIn = new DateTime(2025, 9, 23, 9, 0, 0), CheckOut = new DateTime(2025, 9, 23, 18, 0, 0), DurationHours = 9.0m, ShiftAssignmentId = 10 }
             );
 
-            // Seed RolePermissions (10 samples, for Roles 1-10)
+            // RolePermissions
             builder.Entity<RolePermission>().HasData(
-                new RolePermission { RolePermissionId = 1, RoleId = 1, Module = ModuleName.Employee, Actions = PermissionAction.View | PermissionAction.Create, ScopeType = ScopeType.Global },
-                new RolePermission { RolePermissionId = 2, RoleId = 2, Module = ModuleName.Team, Actions = PermissionAction.View | PermissionAction.Edit, ScopeType = ScopeType.Global },
-                new RolePermission { RolePermissionId = 3, RoleId = 3, Module = ModuleName.Shift, Actions = PermissionAction.View | PermissionAction.Delete, ScopeType = ScopeType.Global },
-                new RolePermission { RolePermissionId = 4, RoleId = 4, Module = ModuleName.Attendance, Actions = PermissionAction.View, ScopeType = ScopeType.Global },
-                new RolePermission { RolePermissionId = 5, RoleId = 5, Module = ModuleName.Account, Actions = PermissionAction.Create | PermissionAction.Edit, ScopeType = ScopeType.Global },
-                new RolePermission { RolePermissionId = 6, RoleId = 6, Module = ModuleName.ShiftType, Actions = PermissionAction.View | PermissionAction.Create, ScopeType = ScopeType.Global },
-                new RolePermission { RolePermissionId = 7, RoleId = 7, Module = ModuleName.Account, Actions = PermissionAction.Edit | PermissionAction.Delete, ScopeType = ScopeType.Global },
-                new RolePermission { RolePermissionId = 8, RoleId = 8, Module = ModuleName.Employee, Actions = PermissionAction.View, ScopeType = ScopeType.Global },
-                new RolePermission { RolePermissionId = 9, RoleId = 9, Module = ModuleName.Employee, Actions = PermissionAction.Create, ScopeType = ScopeType.Global },
-                new RolePermission { RolePermissionId = 10, RoleId = 10, Module = ModuleName.Team, Actions = PermissionAction.View | PermissionAction.Edit, ScopeType = ScopeType.Global }
-            );
-
-            // Seed AccountRoles (10 samples, linking Accounts 1-10 to Roles 1-10)
-            builder.Entity<AccountRole>().HasData(
-                new AccountRole { AccountId = 1, RoleId = 1 },
-                new AccountRole { AccountId = 2, RoleId = 2 },
-                new AccountRole { AccountId = 3, RoleId = 3 },
-                new AccountRole { AccountId = 4, RoleId = 4 },
-                new AccountRole { AccountId = 5, RoleId = 5 },
-                new AccountRole { AccountId = 6, RoleId = 6 },
-                new AccountRole { AccountId = 7, RoleId = 7 },
-                new AccountRole { AccountId = 8, RoleId = 8 },
-                new AccountRole { AccountId = 9, RoleId = 9 },
-                new AccountRole { AccountId = 10, RoleId = 10 }
+                // Employee Manager
+                new RolePermission { RolePermissionId = 1, RoleId = 2, Module = ModuleName.Employee, Actions = PermissionAction.View | PermissionAction.Create | PermissionAction.Edit | PermissionAction.Delete, ScopeType = ScopeType.Global },
+                // Team Manager
+                new RolePermission { RolePermissionId = 2, RoleId = 3, Module = ModuleName.Team, Actions = PermissionAction.View | PermissionAction.Edit, ScopeType = ScopeType.Global },
+                // Shift Manager
+                new RolePermission { RolePermissionId = 3, RoleId = 4, Module = ModuleName.Shift, Actions = PermissionAction.View | PermissionAction.Create | PermissionAction.Delete, ScopeType = ScopeType.Global },
+                // ShiftType Manager
+                new RolePermission { RolePermissionId = 4, RoleId = 5, Module = ModuleName.ShiftType, Actions = PermissionAction.View | PermissionAction.Create, ScopeType = ScopeType.Global },
+                // Attendance Manager
+                new RolePermission { RolePermissionId = 5, RoleId = 6, Module = ModuleName.Attendance, Actions = PermissionAction.View | PermissionAction.Delete, ScopeType = ScopeType.Global },
+                // Account Manager
+                new RolePermission { RolePermissionId = 6, RoleId = 7, Module = ModuleName.Account, Actions = PermissionAction.View | PermissionAction.Edit | PermissionAction.Create, ScopeType = ScopeType.Global }
             );
 
             // Seed AccountPermissions (5 samples, using valid ModuleName enum values)
@@ -379,22 +364,32 @@ namespace BaseHrm.Data
                 new AccountPermission { AccountPermissionId = 5, AccountId = 5, Module = ModuleName.Account, Actions = PermissionAction.View | PermissionAction.Edit, ScopeType = ScopeType.Global }
             );
 
-            // Master RolePermissions for RoleId = 1
-            var rolePermissions = new List<RolePermission>();
-            int rpId = 11; // Start after 10 samples
+            // Master role gets all permissions
+            var masterPermissions = new List<RolePermission>();
+            int rpId = 7; // tiếp tục từ 6
             foreach (var module in Enum.GetValues(typeof(ModuleName)).Cast<ModuleName>())
             {
-                rolePermissions.Add(new RolePermission
+                masterPermissions.Add(new RolePermission
                 {
                     RolePermissionId = rpId++,
-                    RoleId = 1,
+                    RoleId = 1, // Master
                     Module = module,
                     Actions = PermissionAction.View | PermissionAction.Create | PermissionAction.Edit | PermissionAction.Delete,
-                    ScopeType = ScopeType.Global,
-                    ScopeValue = null
+                    ScopeType = ScopeType.Global
                 });
             }
-            builder.Entity<RolePermission>().HasData(rolePermissions);
+            builder.Entity<RolePermission>().HasData(masterPermissions);
+
+            // AccountRoles (map 7 accounts đầu tiên -> 7 roles)
+            builder.Entity<AccountRole>().HasData(
+                new AccountRole { AccountId = 1, RoleId = 1 }, // Master
+                new AccountRole { AccountId = 2, RoleId = 2 },
+                new AccountRole { AccountId = 3, RoleId = 3 },
+                new AccountRole { AccountId = 4, RoleId = 4 },
+                new AccountRole { AccountId = 5, RoleId = 5 },
+                new AccountRole { AccountId = 6, RoleId = 6 },
+                new AccountRole { AccountId = 7, RoleId = 7 }
+            );
         }
     }
 }

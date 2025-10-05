@@ -24,6 +24,7 @@
             tabControl = new TabControl();
             shiftInfoTab = new TabPage();
             shiftInfoPanel = new Panel();
+            label2 = new Label();
             dateTextBox = new TextBox();
             datePicker = new MonthCalendar();
             label3 = new Label();
@@ -95,6 +96,7 @@
             cancelButton = new Button();
             saveButton = new Button();
             createShiftOnlyCheckBox = new CheckBox();
+            errorProvider1 = new ErrorProvider(components);
             headerPanel.SuspendLayout();
             mainPanel.SuspendLayout();
             tabControl.SuspendLayout();
@@ -111,6 +113,7 @@
             ((System.ComponentModel.ISupportInitialize)dgvPickEmployeeBindingSource).BeginInit();
             groupBox1.SuspendLayout();
             buttonPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
             // headerPanel
@@ -196,6 +199,18 @@
             shiftInfoPanel.Padding = new Padding(46, 40, 46, 40);
             shiftInfoPanel.Size = new Size(1425, 623);
             shiftInfoPanel.TabIndex = 0;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.BackColor = Color.Transparent;
+            label2.ForeColor = Color.Red;
+            label2.Location = new Point(42, 16);
+            label2.Name = "label2";
+            label2.Size = new Size(361, 20);
+            label2.TabIndex = 3;
+            label2.Text = "❌ Thông tin có vấn đề, di chuột vào đây để kiểm tra";
+            label2.Visible = false;
             // 
             // dateTextBox
             // 
@@ -888,6 +903,7 @@
             // buttonPanel
             // 
             buttonPanel.BackColor = Color.FromArgb(248, 249, 250);
+            buttonPanel.Controls.Add(label2);
             buttonPanel.Controls.Add(cancelButton);
             buttonPanel.Controls.Add(saveButton);
             buttonPanel.Controls.Add(createShiftOnlyCheckBox);
@@ -950,6 +966,10 @@
             createShiftOnlyCheckBox.UseVisualStyleBackColor = true;
             createShiftOnlyCheckBox.CheckedChanged += CreateShiftOnlyCheckBox_CheckedChanged;
             // 
+            // errorProvider1
+            // 
+            errorProvider1.ContainerControl = this;
+            // 
             // ShiftManagementControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -980,6 +1000,7 @@
             groupBox1.PerformLayout();
             buttonPanel.ResumeLayout(false);
             buttonPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
             ResumeLayout(false);
         }
 
@@ -1063,5 +1084,7 @@
         private Label label3;
         private MonthCalendar datePicker;
         private TextBox dateTextBox;
+        private Label label2;
+        private ErrorProvider errorProvider1;
     }
 }

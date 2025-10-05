@@ -58,6 +58,7 @@ namespace BaseHrm
                     services.AddScoped<IRoleRepository, RoleRepository>();
                     services.AddScoped<IAccountPermissionRepository, AccountPermissionRepository>();
                     services.AddScoped<IPermissionService, PermissionService>();
+                    services.AddScoped<IBackupRestoreService, BackupRestoreService>();
                     // Register forms
                     services.AddTransient<LoginForm>();
                     services.AddTransient<MainForm>();

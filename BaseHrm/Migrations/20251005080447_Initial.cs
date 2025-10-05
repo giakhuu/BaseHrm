@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BaseHrm.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -141,7 +141,8 @@ namespace BaseHrm.Migrations
                     Username = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     IsMaster = table.Column<bool>(type: "bit", nullable: false),
-                    LastLogin = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    LastLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -173,34 +174,6 @@ namespace BaseHrm.Migrations
                         principalTable: "Employees",
                         principalColumn: "EmployeeId",
                         onDelete: ReferentialAction.SetNull);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ShiftAssignments",
-                columns: table => new
-                {
-                    ShiftAssignmentId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    ShiftId = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ApprovedByAccountId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ShiftAssignments", x => x.ShiftAssignmentId);
-                    table.ForeignKey(
-                        name: "FK_ShiftAssignments_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ShiftAssignments_Shifts_ShiftId",
-                        column: x => x.ShiftId,
-                        principalTable: "Shifts",
-                        principalColumn: "ShiftId",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -247,6 +220,39 @@ namespace BaseHrm.Migrations
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "RoleId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShiftAssignments",
+                columns: table => new
+                {
+                    ShiftAssignmentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    ShiftId = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ApprovedByAccountId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShiftAssignments", x => x.ShiftAssignmentId);
+                    table.ForeignKey(
+                        name: "FK_ShiftAssignments_Accounts_ApprovedByAccountId",
+                        column: x => x.ApprovedByAccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountId");
+                    table.ForeignKey(
+                        name: "FK_ShiftAssignments_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShiftAssignments_Shifts_ShiftId",
+                        column: x => x.ShiftId,
+                        principalTable: "Shifts",
+                        principalColumn: "ShiftId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -327,16 +333,13 @@ namespace BaseHrm.Migrations
                 columns: new[] { "RoleId", "Description", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Full access", "Master" },
-                    { 2, "Administrative access", "Admin" },
-                    { 3, "Manager access", "Manager" },
-                    { 4, "Standard employee access", "Employee" },
-                    { 5, "HR department access", "HR" },
-                    { 6, "Finance access", "Finance" },
-                    { 7, "IT support access", "IT" },
-                    { 8, "Sales team access", "Sales" },
-                    { 9, "Marketing access", "Marketing" },
-                    { 10, "Limited guest access", "Guest" }
+                    { 1, "Full access to all modules", "Master" },
+                    { 2, "Manage employees", "Employee Manager" },
+                    { 3, "Manage teams", "Team Manager" },
+                    { 4, "Manage shifts", "Shift Manager" },
+                    { 5, "Manage shift types", "ShiftType Manager" },
+                    { 6, "Manage attendance records", "Attendance Manager" },
+                    { 7, "Manage accounts", "Account Manager" }
                 });
 
             migrationBuilder.InsertData(
@@ -361,16 +364,16 @@ namespace BaseHrm.Migrations
                 columns: new[] { "EmployeeId", "Address", "DateOfBirth", "Email", "FirstName", "Gender", "HireDate", "IsActive", "LastName", "MaxHoursPerDay", "MaxHoursPerMonth", "Phone", "PositionId" },
                 values: new object[,]
                 {
-                    { 1, "123 Main St", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "john.doe@example.com", "John", "Male", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Doe", 8.00m, 160.00m, "1234567890", 1 },
-                    { 2, "456 Elm St", new DateTime(1985, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "jane.smith@example.com", "Jane", "Female", new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Smith", 8.00m, 160.00m, "0987654321", 2 },
-                    { 3, "789 Oak St", new DateTime(1992, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "alice.johnson@example.com", "Alice", "Female", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Johnson", 8.00m, 160.00m, "1112223334", 3 },
-                    { 4, "101 Pine St", new DateTime(1988, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), "bob.brown@example.com", "Bob", "Male", new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Brown", 8.00m, 160.00m, "4445556667", 4 },
-                    { 5, "202 Maple St", new DateTime(1995, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "charlie.davis@example.com", "Charlie", "Male", new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Davis", 8.00m, 160.00m, "7778889990", 5 },
-                    { 6, "303 Birch St", new DateTime(1991, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), "diana.evans@example.com", "Diana", "Female", new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Evans", 8.00m, 160.00m, "3334445556", 6 },
-                    { 7, "404 Cedar St", new DateTime(1987, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "ethan.franklin@example.com", "Ethan", "Male", new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Franklin", 8.00m, 160.00m, "6667778889", 7 },
-                    { 8, "505 Spruce St", new DateTime(1993, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), "fiona.garcia@example.com", "Fiona", "Female", new DateTime(2025, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Garcia", 8.00m, 160.00m, "9990001112", 8 },
-                    { 9, "606 Fir St", new DateTime(1989, 9, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "george.harris@example.com", "George", "Male", new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Harris", 8.00m, 160.00m, "2223334445", 9 },
-                    { 10, "707 Aspen St", new DateTime(1994, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "hannah.irving@example.com", "Hannah", "Female", new DateTime(2025, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Irving", 8.00m, 160.00m, "5556667778", 10 }
+                    { 1, "123 Main St", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "john.doe@example.com", "John", "Nam", new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Doe", 8.00m, 160.00m, "1234567890", 1 },
+                    { 2, "456 Elm St", new DateTime(1985, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "jane.smith@example.com", "Jane", "Nữ", new DateTime(2025, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Smith", 8.00m, 160.00m, "0987654321", 2 },
+                    { 3, "789 Oak St", new DateTime(1992, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "alice.johnson@example.com", "Alice", "Nữ", new DateTime(2025, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Johnson", 8.00m, 160.00m, "1112223334", 3 },
+                    { 4, "101 Pine St", new DateTime(1988, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), "bob.brown@example.com", "Bob", "Nam", new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Brown", 8.00m, 160.00m, "4445556667", 4 },
+                    { 5, "202 Maple St", new DateTime(1995, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "charlie.davis@example.com", "Charlie", "Nam", new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Davis", 8.00m, 160.00m, "7778889990", 5 },
+                    { 6, "303 Birch St", new DateTime(1991, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), "diana.evans@example.com", "Diana", "Nữ", new DateTime(2025, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Evans", 8.00m, 160.00m, "3334445556", 6 },
+                    { 7, "404 Cedar St", new DateTime(1987, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), "ethan.franklin@example.com", "Ethan", "Nam", new DateTime(2025, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Franklin", 8.00m, 160.00m, "6667778889", 7 },
+                    { 8, "505 Spruce St", new DateTime(1993, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), "fiona.garcia@example.com", "Fiona", "Nữ", new DateTime(2025, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Garcia", 8.00m, 160.00m, "9990001112", 8 },
+                    { 9, "606 Fir St", new DateTime(1989, 9, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), "george.harris@example.com", "George", "Nam", new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Harris", 8.00m, 160.00m, "2223334445", 9 },
+                    { 10, "707 Aspen St", new DateTime(1994, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "hannah.irving@example.com", "Hannah", "Nữ", new DateTime(2025, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "Irving", 8.00m, 160.00m, "5556667778", 10 }
                 });
 
             migrationBuilder.InsertData(
@@ -378,22 +381,18 @@ namespace BaseHrm.Migrations
                 columns: new[] { "RolePermissionId", "Actions", "Module", "RoleId", "ScopeType", "ScopeValue" },
                 values: new object[,]
                 {
-                    { 1, 3, 0, 1, 0, null },
-                    { 2, 5, 1, 2, 0, null },
-                    { 3, 9, 2, 3, 0, null },
-                    { 4, 1, 4, 4, 0, null },
-                    { 5, 6, 5, 5, 0, null },
-                    { 6, 3, 3, 6, 0, null },
-                    { 7, 12, 5, 7, 0, null },
-                    { 8, 1, 0, 8, 0, null },
-                    { 9, 2, 0, 9, 0, null },
-                    { 10, 5, 1, 10, 0, null },
-                    { 11, 15, 0, 1, 0, null },
-                    { 12, 15, 1, 1, 0, null },
-                    { 13, 15, 2, 1, 0, null },
-                    { 14, 15, 3, 1, 0, null },
-                    { 15, 15, 4, 1, 0, null },
-                    { 16, 15, 5, 1, 0, null }
+                    { 1, 15, 0, 2, 0, null },
+                    { 2, 5, 1, 3, 0, null },
+                    { 3, 11, 2, 4, 0, null },
+                    { 4, 3, 3, 5, 0, null },
+                    { 5, 9, 4, 6, 0, null },
+                    { 6, 7, 5, 7, 0, null },
+                    { 7, 15, 0, 1, 0, null },
+                    { 8, 15, 1, 1, 0, null },
+                    { 9, 15, 2, 1, 0, null },
+                    { 10, 15, 3, 1, 0, null },
+                    { 11, 15, 4, 1, 0, null },
+                    { 12, 15, 5, 1, 0, null }
                 });
 
             migrationBuilder.InsertData(
@@ -415,36 +414,19 @@ namespace BaseHrm.Migrations
 
             migrationBuilder.InsertData(
                 table: "Accounts",
-                columns: new[] { "AccountId", "EmployeeId", "IsMaster", "LastLogin", "PasswordHash", "Username" },
+                columns: new[] { "AccountId", "EmployeeId", "IsActive", "IsMaster", "LastLogin", "PasswordHash", "Username" },
                 values: new object[,]
                 {
-                    { 1, 1, false, null, "$2a$11$MP56nBCyKjSi.UD6pFbZ8OiGyTb.cIzXir2DlidtPFc428nfbU2wm", "john.doe" },
-                    { 2, 2, false, null, "$2a$11$MP56nBCyKjSi.UD6pFbZ8OiGyTb.cIzXir2DlidtPFc428nfbU2wm", "jane.smith" },
-                    { 3, 3, false, null, "$2a$11$MP56nBCyKjSi.UD6pFbZ8OiGyTb.cIzXir2DlidtPFc428nfbU2wm", "alice.johnson" },
-                    { 4, 4, false, null, "$2a$11$MP56nBCyKjSi.UD6pFbZ8OiGyTb.cIzXir2DlidtPFc428nfbU2wm", "bob.brown" },
-                    { 5, 5, false, null, "$2a$11$MP56nBCyKjSi.UD6pFbZ8OiGyTb.cIzXir2DlidtPFc428nfbU2wm", "charlie.davis" },
-                    { 6, 6, false, null, "$2a$11$MP56nBCyKjSi.UD6pFbZ8OiGyTb.cIzXir2DlidtPFc428nfbU2wm", "diana.evans" },
-                    { 7, 7, false, null, "$2a$11$MP56nBCyKjSi.UD6pFbZ8OiGyTb.cIzXir2DlidtPFc428nfbU2wm", "ethan.franklin" },
-                    { 8, 8, false, null, "$2a$11$MP56nBCyKjSi.UD6pFbZ8OiGyTb.cIzXir2DlidtPFc428nfbU2wm", "fiona.garcia" },
-                    { 9, 9, false, null, "$2a$11$MP56nBCyKjSi.UD6pFbZ8OiGyTb.cIzXir2DlidtPFc428nfbU2wm", "george.harris" },
-                    { 10, 10, false, null, "$2a$11$MP56nBCyKjSi.UD6pFbZ8OiGyTb.cIzXir2DlidtPFc428nfbU2wm", "hannah.irving" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "ShiftAssignments",
-                columns: new[] { "ShiftAssignmentId", "ApprovedByAccountId", "Date", "EmployeeId", "ShiftId" },
-                values: new object[,]
-                {
-                    { 1, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1 },
-                    { 2, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 2 },
-                    { 3, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 3 },
-                    { 4, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, 4 },
-                    { 5, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, 5 },
-                    { 6, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 6, 6 },
-                    { 7, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 7, 7 },
-                    { 8, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 8, 8 },
-                    { 9, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 9, 9 },
-                    { 10, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, 10 }
+                    { 1, 1, true, true, null, "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", "john.doe" },
+                    { 2, 2, true, false, null, "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", "jane.smith" },
+                    { 3, 3, true, false, null, "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", "alice.johnson" },
+                    { 4, 4, true, false, null, "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", "bob.brown" },
+                    { 5, 5, true, false, null, "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", "charlie.davis" },
+                    { 6, 6, true, false, null, "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", "diana.evans" },
+                    { 7, 7, true, false, null, "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", "ethan.franklin" },
+                    { 8, 8, true, false, null, "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", "fiona.garcia" },
+                    { 9, 9, true, false, null, "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", "george.harris" },
+                    { 10, 10, true, false, null, "$2a$12$a/MI775Gp/RqAH3yOpLyc.LiemMXjZndSislMwLbbbY4Mgu4EFxii", "hannah.irving" }
                 });
 
             migrationBuilder.InsertData(
@@ -487,27 +469,24 @@ namespace BaseHrm.Migrations
                     { 4, 4 },
                     { 5, 5 },
                     { 6, 6 },
-                    { 7, 7 },
-                    { 8, 8 },
-                    { 9, 9 },
-                    { 10, 10 }
+                    { 7, 7 }
                 });
 
             migrationBuilder.InsertData(
-                table: "AttendanceRecords",
-                columns: new[] { "AttendanceRecordId", "CheckIn", "CheckOut", "DurationHours", "EmployeeId", "IsOvertime", "ShiftAssignmentId" },
+                table: "ShiftAssignments",
+                columns: new[] { "ShiftAssignmentId", "ApprovedByAccountId", "Date", "EmployeeId", "ShiftId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 9, 23, 8, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 12, 0, 0, 0, DateTimeKind.Unspecified), 4.0m, 1, false, 1 },
-                    { 2, new DateTime(2025, 9, 23, 13, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 17, 0, 0, 0, DateTimeKind.Unspecified), 4.0m, 2, false, 2 },
-                    { 3, new DateTime(2025, 9, 23, 18, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 22, 0, 0, 0, DateTimeKind.Unspecified), 4.0m, 3, false, 3 },
-                    { 4, new DateTime(2025, 9, 23, 9, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 18, 0, 0, 0, DateTimeKind.Unspecified), 9.0m, 4, false, 4 },
-                    { 5, new DateTime(2025, 9, 23, 10, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 14, 0, 0, 0, DateTimeKind.Unspecified), 4.0m, 5, false, 5 },
-                    { 6, new DateTime(2025, 9, 23, 17, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 20, 0, 0, 0, DateTimeKind.Unspecified), 3.0m, 6, false, 6 },
-                    { 7, new DateTime(2025, 9, 23, 9, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 17, 0, 0, 0, DateTimeKind.Unspecified), 8.0m, 7, false, 7 },
-                    { 8, new DateTime(2025, 9, 23, 8, 30, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 16, 30, 0, 0, DateTimeKind.Unspecified), 8.0m, 8, false, 8 },
-                    { 9, new DateTime(2025, 9, 23, 9, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 13, 0, 0, 0, DateTimeKind.Unspecified), 4.0m, 9, false, 9 },
-                    { 10, new DateTime(2025, 9, 23, 9, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 18, 0, 0, 0, DateTimeKind.Unspecified), 9.0m, 10, false, 10 }
+                    { 1, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 1 },
+                    { 2, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 2 },
+                    { 3, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 3 },
+                    { 4, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, 4 },
+                    { 5, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, 5 },
+                    { 6, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 6, 6 },
+                    { 7, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 7, 7 },
+                    { 8, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 8, 8 },
+                    { 9, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 9, 9 },
+                    { 10, 1, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), 10, 10 }
                 });
 
             migrationBuilder.InsertData(
@@ -525,6 +504,23 @@ namespace BaseHrm.Migrations
                     { 8, 8, true, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 9, 9, true, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified) },
                     { 10, 10, true, new DateTime(2025, 9, 23, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AttendanceRecords",
+                columns: new[] { "AttendanceRecordId", "CheckIn", "CheckOut", "DurationHours", "EmployeeId", "IsOvertime", "ShiftAssignmentId" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 9, 23, 8, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 12, 0, 0, 0, DateTimeKind.Unspecified), 4.0m, 1, false, 1 },
+                    { 2, new DateTime(2025, 9, 23, 13, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 17, 0, 0, 0, DateTimeKind.Unspecified), 4.0m, 2, false, 2 },
+                    { 3, new DateTime(2025, 9, 23, 18, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 22, 0, 0, 0, DateTimeKind.Unspecified), 4.0m, 3, false, 3 },
+                    { 4, new DateTime(2025, 9, 23, 9, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 18, 0, 0, 0, DateTimeKind.Unspecified), 9.0m, 4, false, 4 },
+                    { 5, new DateTime(2025, 9, 23, 10, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 14, 0, 0, 0, DateTimeKind.Unspecified), 4.0m, 5, false, 5 },
+                    { 6, new DateTime(2025, 9, 23, 17, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 20, 0, 0, 0, DateTimeKind.Unspecified), 3.0m, 6, false, 6 },
+                    { 7, new DateTime(2025, 9, 23, 9, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 17, 0, 0, 0, DateTimeKind.Unspecified), 8.0m, 7, false, 7 },
+                    { 8, new DateTime(2025, 9, 23, 8, 30, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 16, 30, 0, 0, DateTimeKind.Unspecified), 8.0m, 8, false, 8 },
+                    { 9, new DateTime(2025, 9, 23, 9, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 13, 0, 0, 0, DateTimeKind.Unspecified), 4.0m, 9, false, 9 },
+                    { 10, new DateTime(2025, 9, 23, 9, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 9, 23, 18, 0, 0, 0, DateTimeKind.Unspecified), 9.0m, 10, false, 10 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -583,6 +579,11 @@ namespace BaseHrm.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_ShiftAssignments_ApprovedByAccountId",
+                table: "ShiftAssignments",
+                column: "ApprovedByAccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ShiftAssignments_EmployeeId_Date",
                 table: "ShiftAssignments",
                 columns: new[] { "EmployeeId", "Date" });
@@ -627,9 +628,6 @@ namespace BaseHrm.Migrations
                 name: "TeamMembers");
 
             migrationBuilder.DropTable(
-                name: "Accounts");
-
-            migrationBuilder.DropTable(
                 name: "ShiftAssignments");
 
             migrationBuilder.DropTable(
@@ -637,6 +635,9 @@ namespace BaseHrm.Migrations
 
             migrationBuilder.DropTable(
                 name: "Teams");
+
+            migrationBuilder.DropTable(
+                name: "Accounts");
 
             migrationBuilder.DropTable(
                 name: "Shifts");

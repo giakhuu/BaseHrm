@@ -11,6 +11,7 @@ namespace BaseHrm.Data.DTO
         public string? Username { get; set; }   
         public string? NewPassword { get; set; } 
         public string? Role { get; set; }
-        public bool? IsMaster { get; set; } 
+        public bool? IsMaster { get; set; }
+        public bool IsActive { get; set; }
     }
 }

@@ -30,6 +30,8 @@
         {
             components = new System.ComponentModel.Container();
             panelHeader = new Panel();
+            button5 = new Button();
+            button4 = new Button();
             lblTitle = new Label();
             btnRefresh = new Button();
             btnExportReport = new Button();
@@ -70,6 +72,10 @@
             shiftNameDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             shiftAssignmentDtoBindingSource = new BindingSource(components);
             panelShiftControls = new Panel();
+            button2 = new Button();
+            button3 = new Button();
+            textBox1 = new TextBox();
+            label3 = new Label();
             btnDelEmployee = new Button();
             button1 = new Button();
             txtEmployee = new TextBox();
@@ -94,10 +100,7 @@
             lblLastUpdated = new Label();
             shiftContextMenu = new ContextMenuStrip(components);
             shiftInfo = new ToolStripMenuItem();
-            button2 = new Button();
-            button3 = new Button();
-            textBox1 = new TextBox();
-            label3 = new Label();
+            toolStripMenuItem1 = new ToolStripMenuItem();
             panelHeader.SuspendLayout();
             panelMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).BeginInit();
@@ -128,6 +131,8 @@
             // panelHeader
             // 
             panelHeader.BackColor = Color.FromArgb(23, 162, 184);
+            panelHeader.Controls.Add(button5);
+            panelHeader.Controls.Add(button4);
             panelHeader.Controls.Add(lblTitle);
             panelHeader.Controls.Add(btnRefresh);
             panelHeader.Controls.Add(btnExportReport);
@@ -138,6 +143,42 @@
             panelHeader.Padding = new Padding(23, 20, 23, 20);
             panelHeader.Size = new Size(1600, 93);
             panelHeader.TabIndex = 0;
+            // 
+            // button5
+            // 
+            button5.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button5.BackColor = Color.FromArgb(0, 123, 255);
+            button5.FlatAppearance.BorderSize = 0;
+            button5.FlatAppearance.MouseOverBackColor = Color.FromArgb(0, 86, 179);
+            button5.FlatStyle = FlatStyle.Flat;
+            button5.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            button5.ForeColor = Color.White;
+            button5.Location = new Point(907, 20);
+            button5.Margin = new Padding(3, 4, 3, 4);
+            button5.Name = "button5";
+            button5.Size = new Size(154, 53);
+            button5.TabIndex = 7;
+            button5.Text = "📊 Khôi phục";
+            button5.UseVisualStyleBackColor = false;
+            button5.Click += button5_Click;
+            // 
+            // button4
+            // 
+            button4.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button4.BackColor = Color.FromArgb(0, 123, 255);
+            button4.FlatAppearance.BorderSize = 0;
+            button4.FlatAppearance.MouseOverBackColor = Color.FromArgb(0, 86, 179);
+            button4.FlatStyle = FlatStyle.Flat;
+            button4.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            button4.ForeColor = Color.White;
+            button4.Location = new Point(1083, 20);
+            button4.Margin = new Padding(3, 4, 3, 4);
+            button4.Name = "button4";
+            button4.Size = new Size(154, 53);
+            button4.TabIndex = 6;
+            button4.Text = "📊 Lưu trữ";
+            button4.UseVisualStyleBackColor = false;
+            button4.Click += button4_Click;
             // 
             // lblTitle
             // 
@@ -623,6 +664,62 @@
             panelShiftControls.Size = new Size(994, 156);
             panelShiftControls.TabIndex = 0;
             // 
+            // button2
+            // 
+            button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button2.BackColor = Color.Red;
+            button2.FlatAppearance.BorderSize = 0;
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            button2.ForeColor = Color.White;
+            button2.Location = new Point(931, 84);
+            button2.Margin = new Padding(3, 4, 3, 4);
+            button2.Name = "button2";
+            button2.Size = new Size(49, 40);
+            button2.TabIndex = 16;
+            button2.Text = "Xóa";
+            button2.UseVisualStyleBackColor = false;
+            button2.Click += button2_Click;
+            // 
+            // button3
+            // 
+            button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button3.BackColor = Color.FromArgb(51, 122, 183);
+            button3.FlatAppearance.BorderSize = 0;
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            button3.ForeColor = Color.White;
+            button3.Location = new Point(786, 84);
+            button3.Margin = new Padding(3, 4, 3, 4);
+            button3.Name = "button3";
+            button3.Size = new Size(126, 40);
+            button3.TabIndex = 15;
+            button3.Text = "Chọn team";
+            button3.UseVisualStyleBackColor = false;
+            button3.Click += button3_Click;
+            // 
+            // textBox1
+            // 
+            textBox1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox1.Location = new Point(570, 84);
+            textBox1.Name = "textBox1";
+            textBox1.PlaceholderText = "Chọn Team";
+            textBox1.ReadOnly = true;
+            textBox1.Size = new Size(194, 34);
+            textBox1.TabIndex = 14;
+            textBox1.Click += button3_Click;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 10F);
+            label3.ForeColor = Color.FromArgb(85, 85, 85);
+            label3.Location = new Point(510, 89);
+            label3.Name = "label3";
+            label3.Size = new Size(54, 23);
+            label3.TabIndex = 13;
+            label3.Text = "Team:";
+            // 
             // btnDelEmployee
             // 
             btnDelEmployee.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -662,10 +759,11 @@
             txtEmployee.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             txtEmployee.Location = new Point(109, 84);
             txtEmployee.Name = "txtEmployee";
-            txtEmployee.PlaceholderText = "--Tên";
+            txtEmployee.PlaceholderText = "Chọn nhân viên";
             txtEmployee.ReadOnly = true;
             txtEmployee.Size = new Size(194, 34);
             txtEmployee.TabIndex = 10;
+            txtEmployee.Click += button1_Click;
             // 
             // label2
             // 
@@ -906,70 +1004,23 @@
             // shiftContextMenu
             // 
             shiftContextMenu.ImageScalingSize = new Size(20, 20);
-            shiftContextMenu.Items.AddRange(new ToolStripItem[] { shiftInfo });
+            shiftContextMenu.Items.AddRange(new ToolStripItem[] { shiftInfo, toolStripMenuItem1 });
             shiftContextMenu.Name = "shiftContextMenu";
-            shiftContextMenu.Size = new Size(179, 28);
+            shiftContextMenu.Size = new Size(211, 80);
             // 
             // shiftInfo
             // 
             shiftInfo.Name = "shiftInfo";
-            shiftInfo.Size = new Size(178, 24);
+            shiftInfo.Size = new Size(210, 24);
             shiftInfo.Text = "👁Xem chi tiết";
             shiftInfo.Click += shiftInfo_Click;
             // 
-            // button2
+            // toolStripMenuItem1
             // 
-            button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button2.BackColor = Color.Red;
-            button2.FlatAppearance.BorderSize = 0;
-            button2.FlatStyle = FlatStyle.Flat;
-            button2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            button2.ForeColor = Color.White;
-            button2.Location = new Point(931, 84);
-            button2.Margin = new Padding(3, 4, 3, 4);
-            button2.Name = "button2";
-            button2.Size = new Size(49, 40);
-            button2.TabIndex = 16;
-            button2.Text = "Xóa";
-            button2.UseVisualStyleBackColor = false;
-            // 
-            // button3
-            // 
-            button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button3.BackColor = Color.FromArgb(51, 122, 183);
-            button3.FlatAppearance.BorderSize = 0;
-            button3.FlatStyle = FlatStyle.Flat;
-            button3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            button3.ForeColor = Color.White;
-            button3.Location = new Point(786, 84);
-            button3.Margin = new Padding(3, 4, 3, 4);
-            button3.Name = "button3";
-            button3.Size = new Size(126, 40);
-            button3.TabIndex = 15;
-            button3.Text = "Chọn team";
-            button3.UseVisualStyleBackColor = false;
-            button3.Click += button3_Click;
-            // 
-            // textBox1
-            // 
-            textBox1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox1.Location = new Point(570, 84);
-            textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "--Tên";
-            textBox1.ReadOnly = true;
-            textBox1.Size = new Size(194, 34);
-            textBox1.TabIndex = 14;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 10F);
-            label3.ForeColor = Color.FromArgb(85, 85, 85);
-            label3.Location = new Point(510, 89);
-            label3.Name = "label3";
-            label3.Size = new Size(54, 23);
-            label3.TabIndex = 13;
-            label3.Text = "Team:";
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(210, 24);
+            toolStripMenuItem1.Text = "🗑️ Xóa ca làm";
+            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // DailyShiftSummaryControl
             // 
@@ -1090,5 +1141,8 @@
         private Button button3;
         private TextBox textBox1;
         private Label label3;
+        private Button button4;
+        private Button button5;
+        private ToolStripMenuItem toolStripMenuItem1;
     }
 }

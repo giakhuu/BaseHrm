@@ -22,6 +22,7 @@ namespace BaseHrm.Data.Models
 
         public bool IsMaster { get; set; } = false;
         public DateTime? LastLogin { get; set; }
+        public bool IsActive { get; set; } = true;
 
     }
 }

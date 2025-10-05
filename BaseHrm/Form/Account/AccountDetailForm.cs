@@ -93,8 +93,6 @@ namespace BaseHrm
         {
             txtUsername.ReadOnly = readOnly;
             txtPassword.ReadOnly = readOnly;
-            if (cmbRole != null)
-                cmbRole.Enabled = !readOnly;
             if (chkIsMaster != null)
                 chkIsMaster.Enabled = !readOnly;
 
@@ -110,6 +108,7 @@ namespace BaseHrm
             btnAddRole.Enabled = !readOnly;
             btnAddPermission.Enabled = !readOnly;
             toolStripMenuItem2.Enabled = !readOnly;
+            activeCheckBox.Enabled = !readOnly;
         }
 
         private void AccountDetailForm_Load(object sender, EventArgs e)
@@ -158,8 +157,6 @@ namespace BaseHrm
                 txtAccountId.Text = _account.AccountId.ToString();
                 txtUsername.Text = _account.Username;
                 txtPassword.Text = _isEditMode ? "" : "••••••••";
-                if (cmbRole != null)
-                    cmbRole.SelectedItem = _account.Role;
                 if (chkIsMaster != null)
                     chkIsMaster.Checked = _account.IsMaster;
                 txtLastLogin.Text = _account.LastLogin?.ToString("dd/MM/yyyy HH:mm") ?? "Never";
@@ -169,6 +166,7 @@ namespace BaseHrm
                 txtEmployeeEmail.Text = _account.EmployeeEmail;
                 txtEmployeePhone.Text = _account.EmployeePhone ?? "";
                 txtEmployeePosition.Text = _account.EmployeePositionName ?? "";
+                activeCheckBox.Checked = _account.IsActive;
             }
 
             if (_isNewAccount)
@@ -210,7 +208,8 @@ namespace BaseHrm
                     AccountId = _account.AccountId,
                     Username = txtUsername.Text.Trim(),
                     IsMaster = chkIsMaster?.Checked ?? false,
-                    NewPassword = txtPassword.Text.Trim()
+                    NewPassword = txtPassword.Text.Trim(),
+                    IsActive = activeCheckBox.Checked
                 };
 
                 await _accountService.UpdateAsync(updateAccountDto);
